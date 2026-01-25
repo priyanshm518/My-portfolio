@@ -4,1095 +4,603 @@
     <link rel="icon" href="logo.jpg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Priyansh Makwana | IT Student Portfolio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Priyansh Makwana | Neon Portfolio</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Three.js for 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
     <style>
-        /* Base Styles */
+        /* --- NEON THEME VARIABLES --- */
         :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --accent-color: #3b82f6;
-            --light-color: #f8fafc;
-            --dark-color: #1e293b;
-            --gray-color: #64748b;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --bg-dark: #050510;
+            --primary: #ff00cc; /* Neon Pink */
+            --secondary: #3333ff; /* Deep Blue */
+            --accent: #00ffff; /* Cyan */
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: #a0a0c0;
+            --gradient-main: linear-gradient(135deg, #ff00cc 0%, #3333ff 100%);
         }
-        
-        /* Dark Theme Variables */
-        .dark-theme {
-            --light-color: #0f172a;
-            --dark-color: #f8fafc;
-            --gray-color: #94a3b8;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            line-height: 1.6;
-            color: var(--dark-color);
-            background-color: var(--light-color);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
         }
-        
+
+        /* --- BACKGROUND --- */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #000000 100%);
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; line-height: 1.1; }
+
+        .gradient-text {
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* --- LAYOUT --- */
         .container {
-            width: 90%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        section {
-            padding: 80px 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
+            padding: 0 20px;
             position: relative;
+            z-index: 1;
         }
-        
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--dark-color);
-            display: inline-block;
-            position: relative;
-        }
-        
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            width: 70px;
-            height: 4px;
-            background-color: var(--primary-color);
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 28px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: var(--border-radius);
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-            border: none;
-            cursor: pointer;
-        }
-        
-        .btn:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px);
-            box-shadow: var(--box-shadow);
-        }
-        
-        .btn-secondary {
-            background-color: var(--dark-color);
-            color: var(--light-color);
-        }
-        
-        .btn-secondary:hover {
-            background-color: var(--gray-color);
-        }
-        
-        /* Theme Toggle */
-        .theme-toggle {
+
+        section { padding: 100px 0; }
+
+        /* --- NAVBAR --- */
+        .navbar {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1001;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            box-shadow: var(--box-shadow);
-        }
-        
-        .theme-toggle:hover {
-            transform: scale(1.1);
-        }
-        
-        /* Header & Navigation */
-        header {
-            background-color: var(--light-color);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            width: 100%;
             top: 0;
-            z-index: 1000;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            width: 100%;
             padding: 20px 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
         }
-        
+
+        .nav-content { display: flex; justify-content: space-between; align-items: center; }
+
         .logo {
             font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary-color);
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-link {
+            color: var(--text-main);
             text-decoration: none;
-        }
-        
-        .logo span {
-            color: var(--dark-color);
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark-color);
-            font-weight: 600;
+            font-weight: 500;
+            position: relative;
             transition: color 0.3s;
         }
-        
-        .nav-links a:hover {
-            color: var(--primary-color);
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0;
+            background: var(--accent); transition: width 0.3s ease;
         }
-        
-        .menu-toggle {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--dark-color);
-        }
-        
-        /* Hero Section */
+        .nav-link:hover::after { width: 100%; }
+
+        /* --- HERO SECTION --- */
         .hero {
-            padding-top: 150px;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
+            position: relative;
         }
         
-        .hero-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        
-        .hero-text {
-            flex: 1;
-            min-width: 300px;
-            padding-right: 30px;
-        }
-        
-        .hero-image {
-            flex: 1;
-            min-width: 300px;
-            text-align: center;
-        }
-        
-        .hero-image img {
-            max-width: 100%;
-            border-radius: 50%;
-            border: 10px solid var(--light-color);
-            box-shadow: var(--box-shadow);
-        }
-        
-        .hero-text h1 {
-            font-size: 3.2rem;
-            margin-bottom: 10px;
-            color: var(--dark-color);
-        }
-        
-        .hero-text h2 {
-            font-size: 1.8rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-        
-        .hero-text p {
+        .hero-content { max-width: 800px; }
+        .hero h1 { font-size: 5rem; margin-bottom: 20px; font-weight: 900; }
+        .hero p { font-size: 1.5rem; color: var(--text-muted); margin-bottom: 40px; max-width: 600px; }
+
+        /* --- BUTTONS --- */
+        .btn-glow {
+            display: inline-block;
+            padding: 15px 40px;
             font-size: 1.1rem;
-            color: var(--gray-color);
-            margin-bottom: 30px;
+            font-weight: 700;
+            color: white;
+            background: transparent;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
-        
-        .highlight {
-            color: var(--primary-color);
-            font-weight: 600;
+        .btn-glow::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 100%;
+            background: var(--primary); z-index: -1; transition: width 0.3s ease;
         }
-        
-        /* About Section */
-        .about-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        
-        .about-text {
-            flex: 1;
-            min-width: 300px;
-            padding-right: 40px;
-        }
-        
-        .about-text h3 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: var(--dark-color);
-        }
-        
-        .about-text p {
-            margin-bottom: 20px;
-            color: var(--gray-color);
-        }
-        
-        .about-details {
-            flex: 1;
-            min-width: 300px;
-        }
-        
-        .detail-item {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .detail-icon {
-            width: 50px;
-            height: 50px;
-            background-color: rgba(37, 99, 235, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: var(--primary-color);
-            font-size: 1.2rem;
-        }
-        
-        /* Skills Section */
-        .skills-container {
+        .btn-glow:hover::before { width: 100%; }
+        .btn-glow:hover { box-shadow: 0 0 20px var(--primary); border-color: transparent; }
+
+        /* --- GLASS CARDS (Projects/Resume) --- */
+        .grid-3 {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
+            margin-top: 50px;
         }
-        
-        .skill-category {
-            background-color: var(--light-color);
-            border-radius: var(--border-radius);
+
+        .glass-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
             padding: 30px;
-            box-shadow: var(--box-shadow);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(12px);
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: transform 0.1s ease-out;
         }
+
+        .card-inner { transform: translateZ(20px); }
+
+        .card-icon { font-size: 3rem; color: var(--accent); margin-bottom: 20px; }
+        .card-title { font-size: 1.8rem; margin-bottom: 10px; color: white; font-weight: 700; }
+        .card-desc { color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
         
-        .skill-category h3 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: var(--dark-color);
-            display: flex;
-            align-items: center;
-        }
-        
-        .skill-category h3 i {
-            margin-right: 10px;
-            color: var(--primary-color);
-        }
-        
-        .skill-item {
-            margin-bottom: 20px;
-        }
-        
-        .skill-name {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-        
-        .skill-bar {
-            height: 10px;
-            background-color: rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        
-        .skill-level {
-            height: 100%;
-            background-color: var(--primary-color);
-            border-radius: 5px;
-        }
-        
-        /* Projects Section */
-        .projects-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-        }
-        
-        .project-card {
-            background-color: var(--light-color);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--box-shadow);
-            transition: var(--transition);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-        
-        .project-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .project-img {
-            height: 200px;
-            background-color: rgba(37, 99, 235, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-color);
-            font-size: 3rem;
-        }
-        
-        .project-info {
-            padding: 25px;
-        }
-        
-        .project-info h3 {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-            color: var(--dark-color);
-        }
-        
-        .project-info p {
-            color: var(--gray-color);
-            margin-bottom: 15px;
-        }
-        
-        .project-tags {
-            display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-        
-        .project-tags span {
-            background-color: rgba(0, 0, 0, 0.05);
-            padding: 5px 10px;
+        .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .tag {
+            background: rgba(0, 255, 255, 0.1);
+            color: var(--accent);
+            padding: 5px 12px;
             border-radius: 20px;
             font-size: 0.8rem;
-            margin-right: 8px;
-            margin-bottom: 8px;
-            color: var(--dark-color);
+            font-weight: 600;
+            border: 1px solid rgba(0,255,255,0.2);
         }
-        
-        /* Featured Project */
-        .featured-project {
-            grid-column: 1 / -1;
-            display: flex;
-            flex-wrap: wrap;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(59, 130, 246, 0.02) 100%);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--box-shadow);
-            margin-bottom: 30px;
-            border: 1px solid rgba(37, 99, 235, 0.1);
+
+        /* --- SKILLS (Neon Bars) --- */
+        .skill-item { margin-bottom: 25px; }
+        .skill-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; }
+        .skill-track {
+            height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;
         }
-        
-        .featured-img {
-            flex: 1;
-            min-width: 300px;
-            background-color: rgba(37, 99, 235, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-color);
-            font-size: 4rem;
-            padding: 30px;
+        .skill-fill {
+            height: 100%; background: var(--primary); width: 0%; 
+            box-shadow: 0 0 10px var(--primary);
+            border-radius: 4px;
+            transition: width 1.5s ease-out;
         }
-        
-        .featured-info {
-            flex: 1;
-            min-width: 300px;
-            padding: 40px;
-        }
-        
-        .featured-info h3 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            color: var(--dark-color);
-        }
-        
-        .featured-info p {
-            color: var(--gray-color);
-            margin-bottom: 20px;
-        }
-        
-        /* Contact Section */
-        .contact-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-        }
-        
-        .contact-info {
-            flex: 1;
-            min-width: 300px;
-        }
-        
-        .contact-form {
-            flex: 1;
-            min-width: 300px;
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        
-        .contact-icon {
-            width: 50px;
-            height: 50px;
-            background-color: rgba(37, 99, 235, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: var(--primary-color);
+
+        /* --- CONTACT --- */
+        .contact-info-item {
+            display: flex; align-items: center; gap: 15px; margin-bottom: 30px;
             font-size: 1.2rem;
         }
-        
-        .form-group {
-            margin-bottom: 20px;
+        .contact-icon {
+            color: var(--accent); background: rgba(0,255,255,0.1);
+            width: 50px; height: 50px; border-radius: 50%; display: flex; 
+            align-items: center; justify-content: center;
         }
-        
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            background-color: var(--light-color);
-            color: var(--dark-color);
-        }
-        
-        .form-group textarea {
-            height: 150px;
-            resize: vertical;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--dark-color);
-            color: var(--light-color);
-            padding: 40px 0;
-            text-align: center;
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            margin: 0 10px;
-            color: var(--light-color);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-        
-        .social-links a:hover {
-            background-color: var(--primary-color);
-            transform: translateY(-5px);
-        }
-        
-        .copyright {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-        }
-        
-        /* Responsive Styles */
-        @media (max-width: 992px) {
-            .hero-text, .about-text, .contact-info {
-                padding-right: 0;
-                margin-bottom: 40px;
-            }
-            
-            .hero-content, .about-content, .contact-content {
-                flex-direction: column;
-            }
-            
-            .featured-project {
-                flex-direction: column;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .nav-links {
-                position: fixed;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                background-color: var(--light-color);
-                flex-direction: column;
-                align-items: center;
-                padding: 20px 0;
-                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-                transform: translateY(-150%);
-                transition: transform 0.4s;
-            }
-            
-            .nav-links.active {
-                transform: translateY(0);
-            }
-            
-            .nav-links li {
-                margin: 15px 0;
-            }
-            
-            .menu-toggle {
-                display: block;
-            }
-            
-            .theme-toggle {
-                top: 80px;
-                right: 20px;
-            }
-            
-            .hero {
-                padding-top: 120px;
-            }
-            
-            .hero-text h1 {
-                font-size: 2.5rem;
-            }
-            
-            .section-title h2 {
-                font-size: 2rem;
-            }
-            
-            section {
-                padding: 60px 0;
 
-            }
+        /* --- FOOTER --- */
+        footer {
+            text-align: center; padding: 50px; border-top: 1px solid var(--glass-border);
+            color: var(--text-muted);
+        }
+        .socials { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
+        .social-btn {
+            width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--glass-border);
+            color: white; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; transition: 0.3s;
+        }
+        .social-btn:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-3px); }
+
+        /* Mobile */
+        @media(max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            .nav-links { display: none; } /* Simplified for demo */
         }
     </style>
 </head>
 <body>
-    <!-- Theme Toggle -->
-    <button class="theme-toggle" id="themeToggle">
-        <i class="fas fa-moon"></i>
-    </button>
 
-    <!-- Header & Navigation -->
-    <header>
-        <div class="container">
-            <nav>
-                <a href="#" class="logo">Makwana Priyansh</a>
-                <div class="menu-toggle" id="menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </div>
-                <ul class="nav-links" id="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#skills">Skills</a></li>
-                    <li><a href="#projects">Projects</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                    <li><a href="#resume">Resume</a></li>
-</ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h1>Makwana Priyansh</h1>
-                    <h2>Diploma IT Student</h2>
-                    <p>Hello! I'm <span class="highlight">Priyansh Makwana</span>, an 18-year-old passionate IT student from <span class="highlight">Mahuva, Gujarat</span>. Currently pursuing a Diploma in Information Technology, I'm focused on building my skills in web development, programming, and IT solutions.</p>
-                    <a href="#contact" class="btn">Get In Touch</a>
-                    <a href="#projects" class="btn btn-secondary">View My Projects</a>
-                </div>
-                <div class="hero-image">
-    <div style="
-        width: 350px;
-        height: 350px;
-        background-color: rgba(37, 99, 235, 0.1);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto;
-        overflow: hidden;
-    ">
-        <img 
-            src="p.jpeg" 
-            alt="My Photo"
-            style="
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            "
-        >
-    </div>
-</div>
-           </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about">
-        <div class="container">
-            <div class="section-title">
-                <h2>About Me</h2>
-            </div>
-            <div class="about-content">
-                <div class="about-text">
-                    <h3>My Journey in Information Technology</h3>
-                    <p>I'm currently pursuing a Diploma in Information Technology, where I'm developing a strong foundation in computer systems, programming, and web development. My educational journey has equipped me with both theoretical knowledge and practical skills in the IT domain.</p>
-                    <p>Coming from Mahuva, Gujarat, I bring a unique perspective to problem-solving and a strong work ethic that I've developed through my cultural background and education.</p>
-                    <p>My goal is to become a proficient IT professional who can create innovative solutions to real-world problems through technology.</p>
-                </div>
-                <div class="about-details">
-                    <div class="detail-item">
-                        <div class="detail-icon">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div>
-                            <h4>Name</h4>
-                            <p>Makwana Priyansh</p>
-                        </div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div>
-                            <h4>Location</h4>
-                            <p>Mahuva, Gujarat, India</p>
-                        </div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <div>
-                            <h4>Education</h4>
-                            <p>Diploma in Information Technology</p>
-                        </div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-icon">
-                            <i class="fas fa-birthday-cake"></i>
-                        </div>
-                        <div>
-                            <h4>Age</h4>
-                            <p>18 Years</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" style="background-color: rgba(37, 99, 235, 0.03);">
-        <div class="container">
-            <div class="section-title">
-                <h2>Technical Skills</h2>
-            </div>
-            <div class="skills-container">
-                <div class="skill-category">
-                    <h3><i class="fas fa-code"></i> Frontend</h3>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>HTML5</span>
-                            <span>90%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="width: 90%;"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>CSS3</span>
-                            <span>85%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="width: 85%;"></div>
-                        </div>
-                    </div>
-                     </div>
-                
-                <div class="skill-category">
-                    <h3><i class="fas fa-server"></i> Backend & Database</h3>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>PHP</span>
-                            <span>80%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="width: 80%;"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>MySQL</span>
-                            <span>85%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="width: 85%;"></div>
-                        </div>
-                    </div>
-                   
-                   
-                </div>
-                
-                <div class="skill-category">
-                    <h3><i class="fas fa-tools"></i> Tools & Other</h3>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>Git & GitHub</span>
-                            <span>80%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="width: 80%;"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <div class="skill-name">
-                            <span>VS Code</span>
-                            <span>90%</span>
-                        </div>
-                        <div class="skill-bar">
-                            <div class="skill-level" style="width: 90%;"></div>
-                        </div>
-                    </div>
-                    
-                    
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects">
-        <div class="container">
-            <div class="section-title">
-                <h2>My Projects</h2>
-            </div>
-            
-            <!-- Featured Project - Car Selling Website -->
-            <div class="featured-project">
-                <div class="featured-img">
-                    <i class="fas fa-car"></i>
-                </div>
-                <div class="featured-info">
-                    <h3>Car Selling Website</h3>
-                    <p>A complete car selling platform with user authentication, car listings, search functionality, and admin panel. Built with HTML, CSS for frontend and PHP with MySQL for backend.</p>
-                    <p><strong>Key Features:</strong></p>
-                    <ul style="color: var(--gray-color); margin-bottom: 20px; padding-left: 20px;">
-                        <li>User registration and login system</li>
-                        <li>Car listing with images, specifications, and pricing</li>
-                        <li>Advanced search and filter options</li>
-                        <li>Admin panel for managing cars and users</li>
-                        <li>Contact forms for potential buyers</li>
-                        <li>Responsive design for all devices</li>
-                    </ul>
-                    <div class="project-tags">
-                        <span>HTML5</span>
-                        <span>CSS3</span>
-                        <span>JavaScript</span>
-                        <span>PHP</span>
-                        <span>MySQL</span>
-                        <span>Responsive Design</span>
-                    </div>
-                    <div style="margin-top: 20px;">
-                        <a href="https://github.com/priyanshm518/citytaxi.git" class="btn btn-secondary" style="margin-left: 10px;">View Code</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Other Projects -->
-            <div class="projects-container">
-                <div class="project-card">
-                    <div class="project-img">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <div class="project-info">
-                        <h3>Personal Portfolio Website</h3>
-                        <p>A responsive portfolio website built with HTML, CSS, and JavaScript to showcase my skills and projects as an IT student.</p>
-                        <div class="project-tags">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                            <span>Responsive Design</span>
-                </div>
-                <div style="margin-top: 20px;">
-                        <a href="https://github.com/priyanshm518/My-portfolio.git" class="btn btn-secondary" style="margin-left: 10px;">View Code</a>
-                    </div>
-            </div>
-        </div>
-    </section>
-<!-- Resume Section -->
-<section id="resume" style="background-color: rgba(37, 99, 235, 0.03);">
-    <div class="container">
-        <div class="section-title">
-            <h2>My Resume</h2>
-        </div>
-
-        <div class="featured-project">
-            <div class="featured-img">
-                <i class="fas fa-file-pdf"></i>
-            </div>
-
-            <div class="featured-info">
-                <h3>Priyansh Makwana – Diploma IT Student</h3>
-                <p style="color: var(--gray-color); margin-bottom: 20px;">
-                    You can view or download my resume which includes my education,
-                    technical skills, and project experience.
-                </p>
-
-                <div style="margin-top: 20px;">
-                 <a href="Priyansh Resume.pdf" download class="btn btn-secondary" style="margin-left: 10px;">
-                        <i class="fas fa-eye"></i> Preview Resume
-                    </a>
-                   
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-    <!-- Contact Section -->
-    <section id="contact" style="background-color: rgba(37, 99, 235, 0.03);">
-        <div class="container">
-            <div class="section-title">
-                <h2>Contact Me</h2>
-            </div>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3 style="margin-bottom: 30px; font-size: 1.8rem;">Let's Connect!</h3>
-                    <p style="margin-bottom: 30px; color: var(--gray-color);">I'm always open to discussing new opportunities, IT projects, or just having a friendly chat about technology. Feel free to reach out to me!</p>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div>
-                            <h4>Email</h4>
-                            <p>priyansh.makwana27@gmail.com</p>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div>
-                            <h4>Phone</h4>
-                            <p>+91 97239 68282</p>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div>
-                            <h4>Location</h4>
-                            <p>Mahuva, Gujarat, India</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="contact-form">
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <input type="text" placeholder="Your Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" placeholder="Your Email" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" placeholder="Subject" required>
-                        </div>
-                        <div class="form-group">
-                            <textarea placeholder="Your Message" required></textarea>
-                        </div>
-                        <button type="submit" class="btn">Send Message</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-   
+    <!-- 3D Canvas Container -->
+    <div id="canvas-container"></div>
     
-    
-   <!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="social-links">
-           <a href="https://www.linkedin.com/in/priyansh-makwana-1ab8973a1/">
+    <!-- React Root -->
+    <div id="root"></div>
 
-                <i class="fab fa-linkedin-in"></i>
-            </a>
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useLayoutEffect } = React;
 
-            <a href="https://github.com/priyanshm518">
-                <i class="fab fa-github"></i>
-            </a>
+        // --- COMPONENT: THREE BACKGROUND (Cyberpunk Style) ---
+        const ThreeBackground = () => {
+            const mountRef = useRef(null);
 
-            <a href="https://wa.me/9723968282">
-                <i class="fab fa-whatsapp"></i>
-            </a>
+            useEffect(() => {
+                const scene = new THREE.Scene();
+                scene.fog = new THREE.FogExp2(0x050510, 0.002);
 
-            <a href="https://www.instagram.com/priyansh071107">
-                <i class="fab fa-instagram"></i>
-            </a>
-        </div>
-        <p class="copyright">© 2023 Makwana Priyansh. All Rights Reserved.</p>
-        <p class="copyright">Diploma IT Student | Mahuva, Gujarat</p>
-    </div>
-</footer>
-    <script>
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = themeToggle.querySelector('i');
-        
-        // Check for saved theme or prefer-color-scheme
-        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-        const currentTheme = localStorage.getItem('theme');
-        
-        if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
-            document.body.classList.add('dark-theme');
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
-        }
-        
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-theme');
-            
-            if (document.body.classList.contains('dark-theme')) {
-                localStorage.setItem('theme', 'dark');
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            } else {
-                localStorage.setItem('theme', 'light');
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
-            }
-        });
-        
-        // Mobile Menu Toggle
-        const menuToggle = document.getElementById('menu-toggle');
-        const navLinks = document.getElementById('nav-links');
-        
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-        
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-            });
-        });
-        
-        // Contact Form Submission
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Thank you for your message! I will get back to you soon.');
-            this.reset();
-        });
-        
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
                 
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 70,
-                        behavior: 'smooth'
-                    });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+                document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+                // Wireframe Icosahedron
+                const geometry = new THREE.IcosahedronGeometry(10, 2);
+                const material = new THREE.MeshBasicMaterial({ 
+                    color: 0xff00cc, 
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.15
+                });
+                const sphere = new THREE.Mesh(geometry, material);
+                scene.add(sphere);
+
+                // Particles
+                const particlesGeometry = new THREE.BufferGeometry();
+                const particlesCount = 700;
+                const posArray = new Float32Array(particlesCount * 3);
+                for(let i = 0; i < particlesCount * 3; i++) {
+                    posArray[i] = (Math.random() - 0.5) * 50;
                 }
-            });
-        });
-        
-        // Skill animation on scroll
-        function animateSkills() {
-            const skillBars = document.querySelectorAll('.skill-level');
-            skillBars.forEach(bar => {
-                const width = bar.style.width;
-                bar.style.width = '0';
-                
-                setTimeout(() => {
-                    bar.style.transition = 'width 1.5s ease-in-out';
-                    bar.style.width = width;
-                }, 300);
-            });
-        }
-        
-        
-        // Animate skills when section is in view
-        const observerOptions = {
-            threshold: 0.3
+                particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+                const particlesMaterial = new THREE.PointsMaterial({
+                    size: 0.05, color: 0x00ffff, transparent: true, opacity: 0.8
+                });
+                const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+                scene.add(particlesMesh);
+
+                camera.position.z = 15;
+
+                // Mouse Interaction
+                let mouseX = 0;
+                let mouseY = 0;
+                const handleMouseMove = (event) => {
+                    mouseX = event.clientX / window.innerWidth - 0.5;
+                    mouseY = event.clientY / window.innerHeight - 0.5;
+                };
+                document.addEventListener('mousemove', handleMouseMove);
+
+                // Animation Loop
+                const animate = () => {
+                    requestAnimationFrame(animate);
+                    sphere.rotation.x += 0.001;
+                    sphere.rotation.y += 0.001;
+                    sphere.rotation.x += mouseY * 0.05;
+                    sphere.rotation.y += mouseX * 0.05;
+                    particlesMesh.rotation.y = -mouseX * 0.2;
+                    particlesMesh.rotation.x = -mouseY * 0.2;
+                    renderer.render(scene, camera);
+                };
+                animate();
+
+                const handleResize = () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                };
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    document.removeEventListener('mousemove', handleMouseMove);
+                    const container = document.getElementById('canvas-container');
+                    if(container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
+                };
+            }, []);
+            return null;
         };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateSkills();
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-        
-        const skillsSection = document.getElementById('skills');
-        if (skillsSection) {
-            observer.observe(skillsSection);
-        }
+
+        // --- COMPONENT: 3D TILT CARD ---
+        const TiltCard = ({ children }) => {
+            const cardRef = useRef(null);
+            const handleMouseMove = (e) => {
+                const card = cardRef.current;
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            };
+            const handleMouseLeave = () => {
+                if(cardRef.current) cardRef.current.style.transform = `perspective(1000px) rotateX(0) rotateY(0)`;
+            };
+            return (
+                <div className="glass-card" ref={cardRef} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+                    <div className="card-inner">{children}</div>
+                </div>
+            );
+        };
+
+        // --- COMPONENT: SKILL BAR (Animated) ---
+        const SkillBar = ({ name, percent }) => {
+            const barRef = useRef(null);
+            useLayoutEffect(() => {
+                gsap.registerPlugin(ScrollTrigger);
+                gsap.to(barRef.current, {
+                    width: `${percent}%`,
+                    duration: 1.5,
+                    ease: "power4.out",
+                    scrollTrigger: { trigger: barRef.current, start: "top 85%" }
+                });
+            }, []);
+            return (
+                <div className="skill-item">
+                    <div className="skill-header">
+                        <span>{name}</span>
+                        <span style={{color: 'var(--primary)'}}>{percent}%</span>
+                    </div>
+                    <div className="skill-track"><div ref={barRef} className="skill-fill"></div></div>
+                </div>
+            );
+        };
+
+        // --- COMPONENTS ---
+
+        const Navbar = () => (
+            <nav className="navbar">
+                <div className="container nav-content">
+                    <div className="logo">Priyansh<span style={{color: 'var(--primary)'}}>.Dev</span></div>
+                    <ul className="nav-links">
+                        <li><a href="#home" className="nav-link">Home</a></li>
+                        <li><a href="#about" className="nav-link">About</a></li>
+                        <li><a href="#skills" className="nav-link">Skills</a></li>
+                        <li><a href="#projects" className="nav-link">Projects</a></li>
+                        <li><a href="#contact" className="nav-link">Contact</a></li>
+                    </ul>
+                </div>
+            </nav>
+        );
+
+        const Hero = () => {
+            const titleRef = useRef(null);
+            useLayoutEffect(() => {
+                const ctx = gsap.context(() => {
+                    gsap.from(titleRef.current, { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" });
+                }, titleRef);
+                return () => ctx.revert();
+            }, []);
+            return (
+                <section className="hero" id="home">
+                    <div className="container hero-content">
+                        <h1 ref={titleRef}>
+                            Hi, I'm <br />
+                            <span className="gradient-text">Makwana Priyansh</span>
+                        </h1>
+                        <p>
+                            Diploma IT Student from Mahuva, Gujarat. <br />
+                            Passionate about building modern web apps using React, PHP, and creative design.
+                        </p>
+                        <a href="#projects" className="btn-glow">View My Work</a>
+                    </div>
+                </section>
+            );
+        };
+
+        const About = () => (
+            <section id="about">
+                <div className="container">
+                    <h2 className="gradient-text" style={{fontSize: '3rem', marginBottom: '30px'}}>About Me</h2>
+                    <div style={{maxWidth: '800px', lineHeight: 1.8, color: 'var(--text-muted)'}}>
+                        <p style={{marginBottom: '20px'}}>
+                            I'm an 18-year-old IT enthusiast currently pursuing my Diploma in Information Technology. 
+                            My journey involves diving deep into web development, mastering the core concepts of programming, 
+                            and crafting digital solutions that are both functional and visually appealing.
+                        </p>
+                        <p>
+                            Based in Mahuva, Gujarat, I combine strong technical skills with a creative mindset. 
+                            Whether it's front-end design or back-end logic, I love solving complex problems with clean code.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Skills = () => (
+            <section id="skills" style={{background: 'rgba(255,255,255,0.01)'}}>
+                <div className="container">
+                    <h2 style={{fontSize: '3rem', marginBottom: '40px'}}>Tech <span className="gradient-text">Stack</span></h2>
+                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px'}}>
+                        <div>
+                            <h3 style={{marginBottom: '20px', color: 'var(--accent)'}}>Frontend</h3>
+                            <SkillBar name="HTML5" percent="90" />
+                            <SkillBar name="CSS3" percent="85" />
+                        </div>
+                        <div>
+                            <h3 style={{marginBottom: '20px', color: 'var(--primary)'}}>Backend</h3>
+                            <SkillBar name="PHP" percent="80" />
+                            <SkillBar name="MySQL" percent="85" />
+                        </div>
+                        <div>
+                            <h3 style={{marginBottom: '20px', color: '#fff'}}>Tools</h3>
+                            <SkillBar name="Git / GitHub" percent="80" />
+                            <SkillBar name="VS Code" percent="90" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Projects = () => {
+            const sectionRef = useRef(null);
+            useLayoutEffect(() => {
+                gsap.registerPlugin(ScrollTrigger);
+                let ctx = gsap.context(() => {
+                    gsap.from(".glass-card", {
+                        y: 100, opacity: 0, duration: 0.8, stagger: 0.2,
+                        scrollTrigger: { trigger: sectionRef.current, start: "top 75%" }
+                    });
+                }, sectionRef);
+                return () => ctx.revert();
+            }, []);
+
+            return (
+                <section id="projects" ref={sectionRef}>
+                    <div className="container">
+                        <h2 style={{fontSize: '3rem', textAlign: 'center', marginBottom: '50px'}}>Featured <span className="gradient-text">Works</span></h2>
+                        <div className="grid-3">
+                            {/* Car Selling Project */}
+                            <TiltCard>
+                                <i className="fas fa-car card-icon"></i>
+                                <h3 className="card-title">Car Selling Website</h3>
+                                <div className="tags">
+                                    <span className="tag">PHP</span>
+                                    <span className="tag">MySQL</span>
+                                    <span className="tag">HTML/CSS</span>
+                                </div>
+                                <p className="card-desc">
+                                    A complete platform for selling cars with user authentication, listings, search filters, and a dynamic admin panel.
+                                </p>
+                                <a href="https://github.com/priyanshm518/citytaxi.git" target="_blank" className="btn-glow" style={{padding: '10px 25px', fontSize: '0.9rem'}}>View Code</a>
+                            </TiltCard>
+
+                            {/* Personal Portfolio Project */}
+                            <TiltCard>
+                                <i className="fas fa-laptop-code card-icon" style={{color: '#ff00cc'}}></i>
+                                <h3 className="card-title">My Portfolio</h3>
+                                <div className="tags">
+                                    <span className="tag">React</span>
+                                    <span className="tag">Three.js</span>
+                                    <span className="tag">GSAP</span>
+                                </div>
+                                <p className="card-desc">
+                                    The site you are looking at right now! A dynamic, 3D-enhanced portfolio built with modern web technologies.
+                                </p>
+                                <a href="https://github.com/priyanshm518/My-portfolio.git" target="_blank" className="btn-glow" style={{padding: '10px 25px', fontSize: '0.9rem'}}>View Code</a>
+                            </TiltCard>
+
+                            {/* Resume Download */}
+                            <TiltCard>
+                                <i className="fas fa-file-pdf card-icon" style={{color: '#fff'}}></i>
+                                <h3 className="card-title">My Resume</h3>
+                                <p className="card-desc">
+                                    Download my detailed resume to view my education, skills, and project experience.
+                                </p>
+                                <a href="Priyansh Resume.pdf" download className="btn-glow" style={{padding: '10px 25px', fontSize: '0.9rem', background: 'var(--primary)', color: 'white'}}>Download PDF</a>
+                            </TiltCard>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        const Contact = () => {
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                alert("Thanks for the message, Priyansh will contact you soon!");
+            };
+            return (
+                <section id="contact" style={{background: 'rgba(255,255,255,0.01)'}}>
+                    <div className="container" style={{maxWidth: '800px', textAlign: 'center'}}>
+                        <h2 style={{fontSize: '3rem', marginBottom: '50px'}}>Get In <span className="gradient-text">Touch</span></h2>
+                        
+                        <div style={{marginBottom: '50px'}}>
+                            <div className="contact-info-item" style={{justifyContent: 'center'}}>
+                                <div className="contact-icon"><i className="fas fa-envelope"></i></div>
+                                <span>priyansh.makwana27@gmail.com</span>
+                            </div>
+                            <div className="contact-info-item" style={{justifyContent: 'center'}}>
+                                <div className="contact-icon"><i className="fas fa-phone"></i></div>
+                                <span>+91 97239 68282</span>
+                            </div>
+                            <div className="contact-info-item" style={{justifyContent: 'center'}}>
+                                <div className="contact-icon"><i className="fas fa-map-marker-alt"></i></div>
+                                <span>Mahuva, Gujarat, India</span>
+                            </div>
+                        </div>
+
+                        <form className="glass-card" onSubmit={handleSubmit} style={{padding: '40px', textAlign: 'left'}}>
+                            <div style={{marginBottom: '20px'}}>
+                                <label style={{color: 'var(--text-muted)', marginBottom: '8px', display: 'block'}}>Name</label>
+                                <input type="text" style={{
+                                    width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)', 
+                                    padding: '12px', color: 'white', borderRadius: '5px'
+                                }} required />
+                            </div>
+                            <div style={{marginBottom: '20px'}}>
+                                <label style={{color: 'var(--text-muted)', marginBottom: '8px', display: 'block'}}>Email</label>
+                                <input type="email" style={{
+                                    width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)', 
+                                    padding: '12px', color: 'white', borderRadius: '5px'
+                                }} required />
+                            </div>
+                            <div style={{marginBottom: '20px'}}>
+                                <label style={{color: 'var(--text-muted)', marginBottom: '8px', display: 'block'}}>Message</label>
+                                <textarea rows="4" style={{
+                                    width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)', 
+                                    padding: '12px', color: 'white', borderRadius: '5px'
+                                }} required></textarea>
+                            </div>
+                            <button type="submit" className="btn-glow" style={{width: '100%'}}>Send Message</button>
+                        </form>
+                    </div>
+                </section>
+            );
+        };
+
+        const Footer = () => (
+            <footer>
+                <div className="container">
+                    <h3>Makwana Priyansh</h3>
+                    <p>© 2024 Diploma IT Student.</p>
+                    <div className="socials">
+                        <a href="https://www.linkedin.com/in/priyansh-makwana-1ab8973a1/" className="social-btn"><i className="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/priyanshm518" className="social-btn"><i className="fab fa-github"></i></a>
+                        <a href="https://wa.me/9723968282" className="social-btn"><i className="fab fa-whatsapp"></i></a>
+                        <a href="https://www.instagram.com/priyansh071107" className="social-btn"><i className="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </footer>
+        );
+
+        const App = () => (
+            <React.Fragment>
+                <ThreeBackground />
+                <Navbar />
+                <main>
+                    <Hero />
+                    <About />
+                    <Skills />
+                    <Projects />
+                    <Contact />
+                </main>
+                <Footer />
+            </React.Fragment>
+        );
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
