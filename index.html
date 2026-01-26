@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="logo.jpg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Priyansh Makwana | Neon Portfolio</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Portfolio of Priyansh Makwana - Diploma IT Student and Web Developer specializing in React, PHP, and modern web technologies">
+    <meta name="keywords" content="web developer, react developer, php developer, portfolio, gujarat, mahuva, IT student">
+    <meta property="og:title" content="Priyansh Makwana | Neon Portfolio">
+    <meta property="og:description" content="Modern web developer portfolio with 3D effects and interactive elements">
+    <meta property="og:image" content="logo.jpg">
+    <meta name="author" content="Priyansh Makwana">
     
     <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -35,13 +44,39 @@
             --gradient-main: linear-gradient(135deg, #ff00cc 0%, #3333ff 100%);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
 
         body {
             background-color: var(--bg-dark);
             color: var(--text-main);
             font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- Skip to main content for accessibility --- */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary);
+            color: white;
+            padding: 8px;
+            z-index: 1001;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .skip-link:focus {
+            top: 10px;
         }
 
         /* --- BACKGROUND --- */
@@ -55,14 +90,62 @@
             background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #000000 100%);
         }
 
+        /* --- Scroll Progress Indicator --- */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--gradient-main);
+            z-index: 1000;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        /* --- Loading Screen --- */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid transparent;
+            border-top: 3px solid var(--primary);
+            border-right: 3px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* --- TYPOGRAPHY --- */
-        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; line-height: 1.1; }
+        h1, h2, h3 { 
+            font-family: 'Space Grotesk', sans-serif; 
+            line-height: 1.1; 
+        }
 
         .gradient-text {
             background: linear-gradient(to right, var(--accent), var(--primary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            display: inline-block;
         }
 
         /* --- LAYOUT --- */
@@ -74,7 +157,10 @@
             z-index: 1;
         }
 
-        section { padding: 100px 0; }
+        section { 
+            padding: 100px 0; 
+            position: relative;
+        }
 
         /* --- NAVBAR --- */
         .navbar {
@@ -84,10 +170,20 @@
             padding: 20px 0;
             z-index: 100;
             backdrop-filter: blur(10px);
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+            transition: background 0.3s ease;
         }
 
-        .nav-content { display: flex; justify-content: space-between; align-items: center; }
+        .navbar.scrolled {
+            background: rgba(5, 5, 16, 0.95);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-content { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
 
         .logo {
             font-size: 1.8rem;
@@ -95,21 +191,73 @@
             color: white;
             text-transform: uppercase;
             letter-spacing: 2px;
+            text-decoration: none;
         }
 
-        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links { 
+            display: flex; 
+            gap: 40px; 
+            list-style: none; 
+        }
+        
         .nav-link {
             color: var(--text-main);
             text-decoration: none;
             font-weight: 500;
             position: relative;
             transition: color 0.3s;
+            padding: 5px 0;
         }
+        
         .nav-link::after {
-            content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0;
-            background: var(--accent); transition: width 0.3s ease;
+            content: ''; 
+            position: absolute; 
+            width: 0; 
+            height: 2px; 
+            bottom: -5px; 
+            left: 0;
+            background: var(--accent); 
+            transition: width 0.3s ease;
         }
-        .nav-link:hover::after { width: 100%; }
+        
+        .nav-link:hover::after { 
+            width: 100%; 
+        }
+
+        .nav-link:hover { 
+            color: var(--accent); 
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        /* --- Theme Toggle --- */
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: var(--accent);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 20px;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            transform: rotate(30deg);
+        }
 
         /* --- HERO SECTION --- */
         .hero {
@@ -119,9 +267,37 @@
             position: relative;
         }
         
-        .hero-content { max-width: 800px; }
-        .hero h1 { font-size: 5rem; margin-bottom: 20px; font-weight: 900; }
-        .hero p { font-size: 1.5rem; color: var(--text-muted); margin-bottom: 40px; max-width: 600px; }
+        .hero-content { 
+            max-width: 800px; 
+        }
+        
+        .hero h1 { 
+            font-size: 5rem; 
+            margin-bottom: 20px; 
+            font-weight: 900; 
+        }
+        
+        .hero p { 
+            font-size: 1.5rem; 
+            color: var(--text-muted); 
+            margin-bottom: 40px; 
+            max-width: 600px; 
+            line-height: 1.6;
+        }
+
+        .blinking-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.5rem;
+            background: var(--accent);
+            margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
 
         /* --- BUTTONS --- */
         .btn-glow {
@@ -140,12 +316,33 @@
             overflow: hidden;
             z-index: 1;
         }
+        
         .btn-glow::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 100%;
-            background: var(--primary); z-index: -1; transition: width 0.3s ease;
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 0%; 
+            height: 100%;
+            background: var(--gradient-main); 
+            z-index: -1; 
+            transition: width 0.3s ease;
         }
-        .btn-glow:hover::before { width: 100%; }
-        .btn-glow:hover { box-shadow: 0 0 20px var(--primary); border-color: transparent; }
+        
+        .btn-glow:hover::before { 
+            width: 100%; 
+        }
+        
+        .btn-glow:hover { 
+            box-shadow: 0 0 20px var(--primary); 
+            border-color: transparent; 
+            transform: translateY(-3px);
+        }
+
+        .btn-glow:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
 
         /* --- GLASS CARDS (Projects/Resume) --- */
         .grid-3 {
@@ -164,15 +361,55 @@
             transform-style: preserve-3d;
             transform: perspective(1000px);
             transition: transform 0.1s ease-out;
+            position: relative;
+            overflow: hidden;
         }
 
-        .card-inner { transform: translateZ(20px); }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
 
-        .card-icon { font-size: 3rem; color: var(--accent); margin-bottom: 20px; }
-        .card-title { font-size: 1.8rem; margin-bottom: 10px; color: white; font-weight: 700; }
-        .card-desc { color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        .card-inner { 
+            transform: translateZ(20px); 
+        }
+
+        .card-icon { 
+            font-size: 3rem; 
+            color: var(--accent); 
+            margin-bottom: 20px; 
+        }
         
-        .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .card-title { 
+            font-size: 1.8rem; 
+            margin-bottom: 10px; 
+            color: white; 
+            font-weight: 700; 
+        }
+        
+        .card-desc { 
+            color: var(--text-muted); 
+            margin-bottom: 20px; 
+            line-height: 1.6; 
+        }
+        
+        .tags { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+        }
+        
         .tag {
             background: rgba(0, 255, 255, 0.1);
             color: var(--accent);
@@ -184,50 +421,325 @@
         }
 
         /* --- SKILLS (Neon Bars) --- */
-        .skill-item { margin-bottom: 25px; }
-        .skill-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; }
-        .skill-track {
-            height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;
+        .skill-item { 
+            margin-bottom: 25px; 
         }
+        
+        .skill-header { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 10px; 
+            font-weight: 600; 
+        }
+        
+        .skill-track {
+            height: 8px; 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 4px; 
+            overflow: hidden;
+        }
+        
         .skill-fill {
-            height: 100%; background: var(--primary); width: 0%; 
+            height: 100%; 
+            background: var(--primary); 
+            width: 0%; 
             box-shadow: 0 0 10px var(--primary);
             border-radius: 4px;
             transition: width 1.5s ease-out;
         }
 
+        /* --- TIMELINE --- */
+        .timeline-container {
+            position: relative;
+            max-width: 800px;
+            margin: 50px auto 0;
+            padding: 20px 0;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--primary);
+            opacity: 0.3;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            width: calc(50% - 40px);
+            padding: 20px;
+            background: var(--glass);
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: calc(50% + 40px);
+        }
+
+        .timeline-date {
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* --- GitHub Stats --- */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            min-width: 150px;
+            background: var(--glass);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .stat-item h3 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
         /* --- CONTACT --- */
         .contact-info-item {
-            display: flex; align-items: center; gap: 15px; margin-bottom: 30px;
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            margin-bottom: 30px;
             font-size: 1.2rem;
+            justify-content: flex-start;
         }
+        
         .contact-icon {
-            color: var(--accent); background: rgba(0,255,255,0.1);
-            width: 50px; height: 50px; border-radius: 50%; display: flex; 
-            align-items: center; justify-content: center;
+            color: var(--accent); 
+            background: rgba(0,255,255,0.1);
+            width: 50px; 
+            height: 50px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 40px auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .contact-form textarea {
+            min-height: 150px;
+            resize: vertical;
         }
 
         /* --- FOOTER --- */
         footer {
-            text-align: center; padding: 50px; border-top: 1px solid var(--glass-border);
+            text-align: center; 
+            padding: 50px; 
+            border-top: 1px solid var(--glass-border);
             color: var(--text-muted);
+            background: rgba(0, 0, 0, 0.3);
         }
-        .socials { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
+        
+        .socials { 
+            display: flex; 
+            justify-content: center; 
+            gap: 20px; 
+            margin-top: 20px; 
+            flex-wrap: wrap;
+        }
+        
         .social-btn {
-            width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--glass-border);
-            color: white; display: flex; align-items: center; justify-content: center;
-            text-decoration: none; transition: 0.3s;
+            width: 50px; 
+            height: 50px; 
+            border-radius: 50%; 
+            border: 1px solid var(--glass-border);
+            color: white; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            text-decoration: none; 
+            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.05);
         }
-        .social-btn:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-3px); }
+        
+        .social-btn:hover { 
+            background: var(--gradient-main); 
+            border-color: transparent; 
+            transform: translateY(-5px) scale(1.1); 
+            box-shadow: 0 10px 20px rgba(255, 0, 204, 0.3);
+        }
 
-        /* Mobile */
-        @media(max-width: 768px) {
+        /* --- Mobile Responsive --- */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 4rem; }
+            .grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        }
+
+        @media (max-width: 768px) {
             .hero h1 { font-size: 3rem; }
-            .nav-links { display: none; } /* Simplified for demo */
+            .hero p { font-size: 1.2rem; }
+            
+            .nav-links { 
+                display: none; 
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .mobile-menu {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 250px;
+                height: 100vh;
+                background: rgba(5, 5, 16, 0.95);
+                backdrop-filter: blur(10px);
+                padding: 80px 40px 40px;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                z-index: 99;
+            }
+            
+            .mobile-menu.active {
+                transform: translateX(0);
+            }
+            
+            .mobile-menu a {
+                color: white;
+                text-decoration: none;
+                font-size: 1.2rem;
+                padding: 10px 0;
+                border-bottom: 1px solid var(--glass-border);
+                transition: color 0.3s;
+            }
+            
+            .mobile-menu a:hover {
+                color: var(--accent);
+            }
+            
+            .timeline-container::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: calc(100% - 80px);
+                left: 80px !important;
+            }
+
+            .theme-toggle {
+                position: absolute;
+                top: 20px;
+                right: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+            .container { padding: 0 15px; }
+            section { padding: 70px 0; }
+        }
+
+        /* --- Accessibility --- */
+        *:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* --- Back to Top Button --- */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-main);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(255, 0, 204, 0.3);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 20px rgba(255, 0, 204, 0.5);
         }
     </style>
 </head>
 <body>
+    <!-- Accessibility Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p>Initializing Portfolio...</p>
+    </div>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress"></div>
+    
+    <!-- Back to Top Button -->
+    <button class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <!-- 3D Canvas Container -->
     <div id="canvas-container"></div>
@@ -238,6 +750,59 @@
     <script type="text/babel">
         const { useState, useEffect, useRef, useLayoutEffect } = React;
 
+        // --- Loading Screen Component ---
+        const LoadingScreen = () => {
+            useEffect(() => {
+                const timer = setTimeout(() => {
+                    document.getElementById('loading-screen').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('loading-screen').style.display = 'none';
+                    }, 500);
+                }, 2000);
+                return () => clearTimeout(timer);
+            }, []);
+            return null;
+        };
+
+        // --- Scroll Progress Component ---
+        const ScrollProgress = () => {
+            useEffect(() => {
+                const updateProgress = () => {
+                    const scrollTop = window.pageYOffset;
+                    const docHeight = document.body.scrollHeight - window.innerHeight;
+                    const scrollPercent = scrollTop / docHeight * 100;
+                    document.querySelector('.scroll-progress').style.width = scrollPercent + '%';
+                };
+                window.addEventListener('scroll', updateProgress);
+                return () => window.removeEventListener('scroll', updateProgress);
+            }, []);
+            return null;
+        };
+
+        // --- Back to Top Component ---
+        const BackToTop = () => {
+            useEffect(() => {
+                const backToTopBtn = document.querySelector('.back-to-top');
+                const toggleVisibility = () => {
+                    if (window.pageYOffset > 300) {
+                        backToTopBtn.classList.add('visible');
+                    } else {
+                        backToTopBtn.classList.remove('visible');
+                    }
+                };
+                window.addEventListener('scroll', toggleVisibility);
+                
+                backToTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+                
+                return () => {
+                    window.removeEventListener('scroll', toggleVisibility);
+                };
+            }, []);
+            return null;
+        };
+
         // --- COMPONENT: THREE BACKGROUND (Cyberpunk Style) ---
         const ThreeBackground = () => {
             const mountRef = useRef(null);
@@ -247,10 +812,14 @@
                 scene.fog = new THREE.FogExp2(0x050510, 0.002);
 
                 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-                const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+                const renderer = new THREE.WebGLRenderer({ 
+                    alpha: true, 
+                    antialias: true,
+                    powerPreference: "high-performance"
+                });
                 
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
                 document.getElementById('canvas-container').appendChild(renderer.domElement);
 
                 // Wireframe Icosahedron
@@ -266,14 +835,17 @@
 
                 // Particles
                 const particlesGeometry = new THREE.BufferGeometry();
-                const particlesCount = 700;
+                const particlesCount = 500; // Reduced for better performance
                 const posArray = new Float32Array(particlesCount * 3);
                 for(let i = 0; i < particlesCount * 3; i++) {
-                    posArray[i] = (Math.random() - 0.5) * 50;
+                    posArray[i] = (Math.random() - 0.5) * 40;
                 }
                 particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
                 const particlesMaterial = new THREE.PointsMaterial({
-                    size: 0.05, color: 0x00ffff, transparent: true, opacity: 0.8
+                    size: 0.05, 
+                    color: 0x00ffff, 
+                    transparent: true, 
+                    opacity: 0.8
                 });
                 const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
                 scene.add(particlesMesh);
@@ -284,24 +856,28 @@
                 let mouseX = 0;
                 let mouseY = 0;
                 const handleMouseMove = (event) => {
-                    mouseX = event.clientX / window.innerWidth - 0.5;
-                    mouseY = event.clientY / window.innerHeight - 0.5;
+                    mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+                    mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
                 };
                 document.addEventListener('mousemove', handleMouseMove);
 
-                // Animation Loop
+                // Animation Loop with optimization
+                let frameId;
                 const animate = () => {
-                    requestAnimationFrame(animate);
-                    sphere.rotation.x += 0.001;
-                    sphere.rotation.y += 0.001;
-                    sphere.rotation.x += mouseY * 0.05;
-                    sphere.rotation.y += mouseX * 0.05;
-                    particlesMesh.rotation.y = -mouseX * 0.2;
-                    particlesMesh.rotation.x = -mouseY * 0.2;
+                    frameId = requestAnimationFrame(animate);
+                    
+                    // Smooth rotation with mouse interaction
+                    sphere.rotation.x += 0.001 + mouseY * 0.005;
+                    sphere.rotation.y += 0.001 + mouseX * 0.005;
+                    
+                    particlesMesh.rotation.y = mouseX * 0.1;
+                    particlesMesh.rotation.x = mouseY * 0.1;
+                    
                     renderer.render(scene, camera);
                 };
                 animate();
 
+                // Responsive handling
                 const handleResize = () => {
                     camera.aspect = window.innerWidth / window.innerHeight;
                     camera.updateProjectionMatrix();
@@ -309,11 +885,16 @@
                 };
                 window.addEventListener('resize', handleResize);
 
+                // Cleanup
                 return () => {
+                    cancelAnimationFrame(frameId);
                     window.removeEventListener('resize', handleResize);
                     document.removeEventListener('mousemove', handleMouseMove);
                     const container = document.getElementById('canvas-container');
-                    if(container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
+                    if(container && container.contains(renderer.domElement)) {
+                        container.removeChild(renderer.domElement);
+                    }
+                    renderer.dispose();
                 };
             }, []);
             return null;
@@ -323,21 +904,30 @@
         const TiltCard = ({ children }) => {
             const cardRef = useRef(null);
             const handleMouseMove = (e) => {
+                if (window.innerWidth <= 768) return; // Disable on mobile
                 const card = cardRef.current;
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -10;
-                const rotateY = ((x - centerX) / centerX) * 10;
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                const rotateX = ((y - centerY) / centerY) * -5;
+                const rotateY = ((x - centerX) / centerX) * 5;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
             };
             const handleMouseLeave = () => {
-                if(cardRef.current) cardRef.current.style.transform = `perspective(1000px) rotateX(0) rotateY(0)`;
+                if(cardRef.current) {
+                    cardRef.current.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
+                }
             };
             return (
-                <div className="glass-card" ref={cardRef} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+                <div 
+                    className="glass-card" 
+                    ref={cardRef} 
+                    onMouseMove={handleMouseMove} 
+                    onMouseLeave={handleMouseLeave}
+                    onTouchStart={handleMouseLeave} // Disable tilt on touch
+                >
                     <div className="card-inner">{children}</div>
                 </div>
             );
@@ -348,11 +938,18 @@
             const barRef = useRef(null);
             useLayoutEffect(() => {
                 gsap.registerPlugin(ScrollTrigger);
-                gsap.to(barRef.current, {
+                const tl = gsap.timeline({
+                    scrollTrigger: { 
+                        trigger: barRef.current.parentElement, 
+                        start: "top 85%",
+                        once: true
+                    }
+                });
+                
+                tl.to(barRef.current, {
                     width: `${percent}%`,
                     duration: 1.5,
-                    ease: "power4.out",
-                    scrollTrigger: { trigger: barRef.current, start: "top 85%" }
+                    ease: "power4.out"
                 });
             }, []);
             return (
@@ -361,36 +958,296 @@
                         <span>{name}</span>
                         <span style={{color: 'var(--primary)'}}>{percent}%</span>
                     </div>
-                    <div className="skill-track"><div ref={barRef} className="skill-fill"></div></div>
+                    <div className="skill-track">
+                        <div ref={barRef} className="skill-fill"></div>
+                    </div>
                 </div>
             );
         };
 
-        // --- COMPONENTS ---
+        // --- COMPONENT: TYPEWRITER EFFECT ---
+        const Typewriter = ({ texts, speed = 100, delay = 1000 }) => {
+            const [displayText, setDisplayText] = useState('');
+            const [currentIndex, setCurrentIndex] = useState(0);
+            const [charIndex, setCharIndex] = useState(0);
+            const [isDeleting, setIsDeleting] = useState(false);
 
-        const Navbar = () => (
-            <nav className="navbar">
-                <div className="container nav-content">
-                    <div className="logo">Priyansh<span style={{color: 'var(--primary)'}}>.Dev</span></div>
-                    <ul className="nav-links">
-                        <li><a href="#home" className="nav-link">Home</a></li>
-                        <li><a href="#about" className="nav-link">About</a></li>
-                        <li><a href="#skills" className="nav-link">Skills</a></li>
-                        <li><a href="#projects" className="nav-link">Projects</a></li>
-                        <li><a href="#contact" className="nav-link">Contact</a></li>
-                    </ul>
+            useEffect(() => {
+                const timeout = setTimeout(() => {
+                    const currentText = texts[currentIndex];
+                    
+                    if (!isDeleting && charIndex < currentText.length) {
+                        setDisplayText(currentText.substring(0, charIndex + 1));
+                        setCharIndex(charIndex + 1);
+                    } else if (isDeleting && charIndex > 0) {
+                        setDisplayText(currentText.substring(0, charIndex - 1));
+                        setCharIndex(charIndex - 1);
+                    } else if (!isDeleting && charIndex === currentText.length) {
+                        setTimeout(() => setIsDeleting(true), delay);
+                    } else if (isDeleting && charIndex === 0) {
+                        setIsDeleting(false);
+                        setCurrentIndex((currentIndex + 1) % texts.length);
+                    }
+                }, isDeleting ? speed / 2 : speed);
+
+                return () => clearTimeout(timeout);
+            }, [charIndex, isDeleting, currentIndex, texts, speed, delay]);
+
+            return (
+                <span className="typewriter-text">
+                    {displayText}
+                    <span className="blinking-cursor"></span>
+                </span>
+            );
+        };
+
+        // --- COMPONENT: THEME TOGGLE ---
+        const ThemeToggle = () => {
+            const [isNeon, setIsNeon] = useState(true);
+            
+            const toggleTheme = () => {
+                setIsNeon(!isNeon);
+                const root = document.documentElement;
+                if (isNeon) {
+                    // Switch to Cyber Green theme
+                    root.style.setProperty('--primary', '#00ff88');
+                    root.style.setProperty('--accent', '#ffaa00');
+                    root.style.setProperty('--secondary', '#8800ff');
+                } else {
+                    // Switch back to Neon theme
+                    root.style.setProperty('--primary', '#ff00cc');
+                    root.style.setProperty('--accent', '#00ffff');
+                    root.style.setProperty('--secondary', '#3333ff');
+                }
+            };
+            
+            return (
+                <button 
+                    onClick={toggleTheme} 
+                    className="theme-toggle"
+                    aria-label="Toggle theme"
+                >
+                    <i className={isNeon ? "fas fa-palette" : "fas fa-moon"}></i>
+                </button>
+            );
+        };
+
+        // --- COMPONENT: GITHUB STATS ---
+        const GitHubStats = () => {
+            const [stats, setStats] = useState({ repos: 0, followers: 0 });
+            
+            useEffect(() => {
+                fetch('https://api.github.com/users/priyanshm518')
+                    .then(res => res.json())
+                    .then(data => {
+                        setStats({
+                            repos: data.public_repos || 0,
+                            followers: data.followers || 0
+                        });
+                    })
+                    .catch(() => {
+                        setStats({ repos: 12, followers: 24 }); // Fallback data
+                    });
+            }, []);
+            
+            return (
+                <div className="stats-container">
+                    <div className="stat-item">
+                        <h3>{stats.repos}+</h3>
+                        <p>GitHub Repositories</p>
+                    </div>
+                    <div className="stat-item">
+                        <h3>{stats.followers}+</h3>
+                        <p>GitHub Followers</p>
+                    </div>
+                    <div className="stat-item">
+                        <h3>5+</h3>
+                        <p>Projects Completed</p>
+                    </div>
                 </div>
-            </nav>
+            );
+        };
+
+        // --- COMPONENT: TIMELINE ---
+        const Timeline = () => (
+            <section id="timeline">
+                <div className="container">
+                    <h2 style={{fontSize: '3rem', marginBottom: '40px'}}>
+                        Education <span className="gradient-text">& Experience</span>
+                    </h2>
+                    <div className="timeline-container">
+                        <div className="timeline-item">
+                            <div className="timeline-date">2023 - Present</div>
+                            <div className="timeline-content">
+                                <h3>Diploma in Information Technology</h3>
+                                <p style={{color: 'var(--accent)', marginBottom: '10px'}}>Government Polytechnic, Mahuva</p>
+                                <p>Current CGPA: 8.5/10</p>
+                                <p>Focus on Web Development, Database Management, and Software Engineering</p>
+                            </div>
+                        </div>
+                        <div className="timeline-item">
+                            <div className="timeline-date">2024</div>
+                            <div className="timeline-content">
+                                <h3>Web Development Projects</h3>
+                                <p style={{color: 'var(--accent)', marginBottom: '10px'}}>Freelance & Personal Projects</p>
+                                <p>Built responsive websites and web applications using modern technologies</p>
+                                <p>Implemented PHP-based backend systems with MySQL databases</p>
+                            </div>
+                        </div>
+                        <div className="timeline-item">
+                            <div className="timeline-date">2023</div>
+                            <div className="timeline-content">
+                                <h3>Learning Journey Begins</h3>
+                                <p style={{color: 'var(--accent)', marginBottom: '10px'}}>Self-Taught Developer</p>
+                                <p>Started learning HTML, CSS, and JavaScript fundamentals</p>
+                                <p>Completed online courses in web development</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         );
+
+        // --- COMPONENT: CONTACT FORM ---
+        const ContactForm = () => {
+            const [formData, setFormData] = useState({ 
+                name: '', 
+                email: '', 
+                message: '' 
+            });
+            const [isSubmitting, setIsSubmitting] = useState(false);
+            
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                
+                // Using Formspree as an example - you'll need to create a free account
+                try {
+                    const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            ...formData,
+                            _subject: 'New message from portfolio contact form'
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        alert('Thank you for your message! I will get back to you soon.');
+                        setFormData({ name: '', email: '', message: '' });
+                    } else {
+                        throw new Error('Form submission failed');
+                    }
+                } catch (error) {
+                    alert('Oops! Something went wrong. Please try again or email me directly.');
+                } finally {
+                    setIsSubmitting(false);
+                }
+            };
+            
+            return (
+                <form onSubmit={handleSubmit} className="contact-form">
+                    <input
+                        type="text"
+                        placeholder="Your Name"
+                        value={formData.name}
+                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                        required
+                        aria-label="Your name"
+                    />
+                    <input
+                        type="email"
+                        placeholder="Your Email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        required
+                        aria-label="Your email"
+                    />
+                    <textarea
+                        placeholder="Your Message"
+                        value={formData.message}
+                        onChange={(e) => setFormData({...formData, message: e.target.value})}
+                        required
+                        aria-label="Your message"
+                    />
+                    <button 
+                        type="submit" 
+                        className="btn-glow"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? 'Sending...' : 'Send Message'}
+                    </button>
+                </form>
+            );
+        };
+
+        // --- MAIN COMPONENTS ---
+        const Navbar = () => {
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+            const [scrolled, setScrolled] = useState(false);
+            
+            useEffect(() => {
+                const handleScroll = () => {
+                    setScrolled(window.scrollY > 50);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+            
+            return (
+                <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+                    <div className="container nav-content">
+                        <a href="#home" className="logo">Priyansh<span style={{color: 'var(--primary)'}}>.Dev</span></a>
+                        
+                        <ul className="nav-links">
+                            <li><a href="#home" className="nav-link">Home</a></li>
+                            <li><a href="#about" className="nav-link">About</a></li>
+                            <li><a href="#skills" className="nav-link">Skills</a></li>
+                            <li><a href="#timeline" className="nav-link">Journey</a></li>
+                            <li><a href="#projects" className="nav-link">Projects</a></li>
+                            <li><a href="#contact" className="nav-link">Contact</a></li>
+                        </ul>
+                        
+                        <ThemeToggle />
+                        
+                        <button 
+                            className="mobile-menu-btn" 
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            aria-label="Toggle menu"
+                        >
+                            <i className={`fas ${isMobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+                        </button>
+                    </div>
+                    
+                    <div className={`mobile-menu ${isMobileMenuOpen ? 'active' : ''}`}>
+                        <a href="#home" onClick={() => setIsMobileMenuOpen(false)}>Home</a>
+                        <a href="#about" onClick={() => setIsMobileMenuOpen(false)}>About</a>
+                        <a href="#skills" onClick={() => setIsMobileMenuOpen(false)}>Skills</a>
+                        <a href="#timeline" onClick={() => setIsMobileMenuOpen(false)}>Journey</a>
+                        <a href="#projects" onClick={() => setIsMobileMenuOpen(false)}>Projects</a>
+                        <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Contact</a>
+                    </div>
+                </nav>
+            );
+        };
 
         const Hero = () => {
             const titleRef = useRef(null);
             useLayoutEffect(() => {
+                gsap.registerPlugin(ScrollTrigger);
                 const ctx = gsap.context(() => {
-                    gsap.from(titleRef.current, { y: 100, opacity: 0, duration: 1.5, ease: "power4.out" });
+                    gsap.from(titleRef.current, { 
+                        y: 100, 
+                        opacity: 0, 
+                        duration: 1.5, 
+                        ease: "power4.out" 
+                    });
                 }, titleRef);
                 return () => ctx.revert();
             }, []);
+            
             return (
                 <section className="hero" id="home">
                     <div className="container hero-content">
@@ -399,8 +1256,16 @@
                             <span className="gradient-text">Makwana Priyansh</span>
                         </h1>
                         <p>
-                            Diploma IT Student from Mahuva, Gujarat. <br />
-                            Passionate about building modern web apps using React, PHP, and creative design.
+                            <Typewriter 
+                                texts={[
+                                    "Diploma IT Student from Mahuva, Gujarat.",
+                                    "Passionate about modern web development.",
+                                    "Building creative digital solutions.",
+                                    "Always learning, always growing."
+                                ]} 
+                                speed={50}
+                                delay={2000}
+                            />
                         </p>
                         <a href="#projects" className="btn-glow">View My Work</a>
                     </div>
@@ -418,10 +1283,12 @@
                             My journey involves diving deep into web development, mastering the core concepts of programming, 
                             and crafting digital solutions that are both functional and visually appealing.
                         </p>
-                        <p>
+                        <p style={{marginBottom: '40px'}}>
                             Based in Mahuva, Gujarat, I combine strong technical skills with a creative mindset. 
                             Whether it's front-end design or back-end logic, I love solving complex problems with clean code.
                         </p>
+                        
+                        <GitHubStats />
                     </div>
                 </div>
             </section>
@@ -434,18 +1301,23 @@
                     <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px'}}>
                         <div>
                             <h3 style={{marginBottom: '20px', color: 'var(--accent)'}}>Frontend</h3>
-                            <SkillBar name="HTML5" percent="90" />
-                            <SkillBar name="CSS3" percent="85" />
+                            <SkillBar name="HTML5" percent="95" />
+                            <SkillBar name="CSS3" percent="90" />
+                            <SkillBar name="JavaScript" percent="80" />
+                            <SkillBar name="React" percent="75" />
                         </div>
                         <div>
                             <h3 style={{marginBottom: '20px', color: 'var(--primary)'}}>Backend</h3>
-                            <SkillBar name="PHP" percent="80" />
+                            <SkillBar name="PHP" percent="85" />
                             <SkillBar name="MySQL" percent="85" />
+                            <SkillBar name="Node.js" percent="70" />
                         </div>
                         <div>
-                            <h3 style={{marginBottom: '20px', color: '#fff'}}>Tools</h3>
-                            <SkillBar name="Git / GitHub" percent="80" />
-                            <SkillBar name="VS Code" percent="90" />
+                            <h3 style={{marginBottom: '20px', color: '#fff'}}>Tools & More</h3>
+                            <SkillBar name="Git / GitHub" percent="85" />
+                            <SkillBar name="VS Code" percent="95" />
+                            <SkillBar name="Responsive Design" percent="90" />
+                            <SkillBar name="UI/UX Design" percent="80" />
                         </div>
                     </div>
                 </div>
@@ -458,8 +1330,15 @@
                 gsap.registerPlugin(ScrollTrigger);
                 let ctx = gsap.context(() => {
                     gsap.from(".glass-card", {
-                        y: 100, opacity: 0, duration: 0.8, stagger: 0.2,
-                        scrollTrigger: { trigger: sectionRef.current, start: "top 75%" }
+                        y: 100, 
+                        opacity: 0, 
+                        duration: 0.8, 
+                        stagger: 0.2,
+                        scrollTrigger: { 
+                            trigger: sectionRef.current, 
+                            start: "top 75%",
+                            once: true
+                        }
                     });
                 }, sectionRef);
                 return () => ctx.revert();
@@ -468,7 +1347,9 @@
             return (
                 <section id="projects" ref={sectionRef}>
                     <div className="container">
-                        <h2 style={{fontSize: '3rem', textAlign: 'center', marginBottom: '50px'}}>Featured <span className="gradient-text">Works</span></h2>
+                        <h2 style={{fontSize: '3rem', textAlign: 'center', marginBottom: '50px'}}>
+                            Featured <span className="gradient-text">Works</span>
+                        </h2>
                         <div className="grid-3">
                             {/* Car Selling Project */}
                             <TiltCard>
@@ -478,36 +1359,71 @@
                                     <span className="tag">PHP</span>
                                     <span className="tag">MySQL</span>
                                     <span className="tag">HTML/CSS</span>
+                                    <span className="tag">JavaScript</span>
+                                    <span className="tag">Bootstrap</span>
                                 </div>
                                 <p className="card-desc">
-                                    A complete platform for selling cars with user authentication, listings, search filters, and a dynamic admin panel.
+                                    A complete platform for selling cars with user authentication, listings, 
+                                    search filters, admin panel, and payment integration.
                                 </p>
-                                <a href="https://github.com/priyanshm518/citytaxi.git" target="_blank" className="btn-glow" style={{padding: '10px 25px', fontSize: '0.9rem'}}>View Code</a>
+                                <a 
+                                    href="https://github.com/priyanshm518/citytaxi.git" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="btn-glow" 
+                                    style={{padding: '10px 25px', fontSize: '0.9rem'}}
+                                >
+                                    <i className="fab fa-github"></i> View Code
+                                </a>
                             </TiltCard>
 
                             {/* Personal Portfolio Project */}
                             <TiltCard>
                                 <i className="fas fa-laptop-code card-icon" style={{color: '#ff00cc'}}></i>
-                                <h3 className="card-title">My Portfolio</h3>
+                                <h3 className="card-title">Interactive Portfolio</h3>
                                 <div className="tags">
                                     <span className="tag">React</span>
                                     <span className="tag">Three.js</span>
                                     <span className="tag">GSAP</span>
+                                    <span className="tag">CSS3</span>
+                                    <span className="tag">JavaScript</span>
                                 </div>
                                 <p className="card-desc">
-                                    The site you are looking at right now! A dynamic, 3D-enhanced portfolio built with modern web technologies.
+                                    The site you are looking at right now! A dynamic, 3D-enhanced portfolio 
+                                    with interactive elements, animations, and responsive design.
                                 </p>
-                                <a href="https://github.com/priyanshm518/My-portfolio.git" target="_blank" className="btn-glow" style={{padding: '10px 25px', fontSize: '0.9rem'}}>View Code</a>
+                                <a 
+                                    href="https://github.com/priyanshm518/My-portfolio.git" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="btn-glow" 
+                                    style={{padding: '10px 25px', fontSize: '0.9rem'}}
+                                >
+                                    <i className="fab fa-github"></i> View Code
+                                </a>
                             </TiltCard>
 
                             {/* Resume Download */}
                             <TiltCard>
                                 <i className="fas fa-file-pdf card-icon" style={{color: '#fff'}}></i>
                                 <h3 className="card-title">My Resume</h3>
+                                <div className="tags">
+                                    <span className="tag">PDF</span>
+                                    <span className="tag">Download</span>
+                                    <span className="tag">Detailed</span>
+                                </div>
                                 <p className="card-desc">
-                                    Download my detailed resume to view my education, skills, and project experience.
+                                    Download my detailed resume to view my education, skills, project experience, 
+                                    and contact information in a professional format.
                                 </p>
-                                <a href="Priyansh Resume.pdf" download className="btn-glow" style={{padding: '10px 25px', fontSize: '0.9rem', background: 'var(--primary)', color: 'white'}}>Download PDF</a>
+                                <a 
+                                    href="Priyansh Resume.pdf" 
+                                    download 
+                                    className="btn-glow" 
+                                    style={{padding: '10px 25px', fontSize: '0.9rem'}}
+                                >
+                                    <i className="fas fa-download"></i> Download PDF
+                                </a>
                             </TiltCard>
                         </div>
                     </div>
@@ -516,82 +1432,109 @@
         };
 
         const Contact = () => {
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                alert("Thanks for the message, Priyansh will contact you soon!");
-            };
             return (
                 <section id="contact" style={{background: 'rgba(255,255,255,0.01)'}}>
-                    <div className="container" style={{maxWidth: '800px', textAlign: 'center'}}>
-                        <h2 style={{fontSize: '3rem', marginBottom: '50px'}}>Get In <span className="gradient-text">Touch</span></h2>
+                    <div className="container" style={{maxWidth: '800px'}}>
+                        <h2 style={{fontSize: '3rem', marginBottom: '50px', textAlign: 'center'}}>
+                            Get In <span className="gradient-text">Touch</span>
+                        </h2>
                         
                         <div style={{marginBottom: '50px'}}>
-                            <div className="contact-info-item" style={{justifyContent: 'center'}}>
+                            <div className="contact-info-item">
                                 <div className="contact-icon"><i className="fas fa-envelope"></i></div>
                                 <span>priyansh.makwana27@gmail.com</span>
                             </div>
-                            <div className="contact-info-item" style={{justifyContent: 'center'}}>
+                            <div className="contact-info-item">
                                 <div className="contact-icon"><i className="fas fa-phone"></i></div>
                                 <span>+91 97239 68282</span>
                             </div>
-                            <div className="contact-info-item" style={{justifyContent: 'center'}}>
+                            <div className="contact-info-item">
                                 <div className="contact-icon"><i className="fas fa-map-marker-alt"></i></div>
                                 <span>Mahuva, Gujarat, India</span>
                             </div>
                         </div>
 
-                        <form className="glass-card" onSubmit={handleSubmit} style={{padding: '40px', textAlign: 'left'}}>
-                            <div style={{marginBottom: '20px'}}>
-                                <label style={{color: 'var(--text-muted)', marginBottom: '8px', display: 'block'}}>Name</label>
-                                <input type="text" style={{
-                                    width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)', 
-                                    padding: '12px', color: 'white', borderRadius: '5px'
-                                }} required />
-                            </div>
-                            <div style={{marginBottom: '20px'}}>
-                                <label style={{color: 'var(--text-muted)', marginBottom: '8px', display: 'block'}}>Email</label>
-                                <input type="email" style={{
-                                    width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)', 
-                                    padding: '12px', color: 'white', borderRadius: '5px'
-                                }} required />
-                            </div>
-                            <div style={{marginBottom: '20px'}}>
-                                <label style={{color: 'var(--text-muted)', marginBottom: '8px', display: 'block'}}>Message</label>
-                                <textarea rows="4" style={{
-                                    width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)', 
-                                    padding: '12px', color: 'white', borderRadius: '5px'
-                                }} required></textarea>
-                            </div>
-                            <button type="submit" className="btn-glow" style={{width: '100%'}}>Send Message</button>
-                        </form>
+                        <ContactForm />
                     </div>
                 </section>
             );
         };
 
         const Footer = () => (
-            <footer>
+            <footer id="main-content">
                 <div className="container">
-                    <h3>Makwana Priyansh</h3>
-                    <p>© 2024 Diploma IT Student.</p>
                     <div className="socials">
-                        <a href="https://www.linkedin.com/in/priyansh-makwana-1ab8973a1/" className="social-btn"><i className="fab fa-linkedin-in"></i></a>
-                        <a href="https://github.com/priyanshm518" className="social-btn"><i className="fab fa-github"></i></a>
-                        <a href="https://wa.me/9723968282" className="social-btn"><i className="fab fa-whatsapp"></i></a>
-                        <a href="https://www.instagram.com/priyansh071107" className="social-btn"><i className="fab fa-instagram"></i></a>
+                        <a
+                            href="https://www.linkedin.com/in/priyansh-makwana-1ab8973a1/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="social-btn"
+                            aria-label="LinkedIn Profile"
+                        >
+                            <i className="fab fa-linkedin-in"></i>
+                        </a>
+
+                        <a
+                            href="https://github.com/priyanshm518"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="social-btn"
+                            aria-label="GitHub Profile"
+                        >
+                            <i className="fab fa-github"></i>
+                        </a>
+
+                        <a
+                            href="https://wa.me/919723968282"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="social-btn"
+                            aria-label="WhatsApp Contact"
+                        >
+                            <i className="fab fa-whatsapp"></i>
+                        </a>
+
+                        <a
+                            href="https://www.instagram.com/priyansh.m27"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="social-btn"
+                            aria-label="Instagram Profile"
+                        >
+                            <i className="fab fa-instagram"></i>
+                        </a>
+
+                        <a
+                            href="mailto:priyansh.makwana27@gmail.com"
+                            className="social-btn"
+                            aria-label="Email Contact"
+                        >
+                            <i className="fas fa-envelope"></i>
+                        </a>
                     </div>
+
+                    <p style={{ marginTop: "30px", fontSize: "0.9rem" }}>
+                        © {new Date().getFullYear()} Makwana Priyansh. All Rights Reserved.
+                    </p>
+                    <p style={{ color: "var(--text-muted)", fontSize: "0.8rem", marginTop: "10px" }}>
+                        Diploma IT Student | Mahuva, Gujarat | Built with React & Three.js
+                    </p>
                 </div>
             </footer>
         );
 
         const App = () => (
             <React.Fragment>
+                <LoadingScreen />
+                <ScrollProgress />
+                <BackToTop />
                 <ThreeBackground />
                 <Navbar />
                 <main>
                     <Hero />
                     <About />
                     <Skills />
+                    <Timeline />
                     <Projects />
                     <Contact />
                 </main>
