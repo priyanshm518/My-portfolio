@@ -67,6 +67,8 @@
             --text-main: #ffffff;
             --text-muted: #a0a0c0;
             --gradient-main: linear-gradient(135deg, #ff00cc 0%, #3333ff 100%);
+            --gradient-accent: linear-gradient(135deg, #00ffff 0%, #00ffaa 100%);
+            --gradient-logo: linear-gradient(45deg, #ff00cc, #00ffff, #3333ff);
             --success: #00ff88;
             --error: #ff4444;
         }
@@ -179,7 +181,7 @@
         }
 
         .gradient-text {
-            background: linear-gradient(to right, var(--accent), var(--primary));
+            background: var(--gradient-main);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -200,21 +202,24 @@
             position: relative;
         }
 
-        /* --- CSS LOGO --- */
+        /* --- ENHANCED DYNAMIC LOGO --- */
         .logo-container {
             display: flex;
             align-items: center;
             gap: 12px;
             text-decoration: none;
+            position: relative;
         }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
+            transform-style: preserve-3d;
+            perspective: 500px;
         }
 
         .logo-icon::before {
@@ -222,10 +227,12 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background: var(--gradient-main);
+            background: var(--gradient-logo);
+            background-size: 300% 300%;
             border-radius: 12px;
-            transform: rotate(45deg);
-            animation: logoPulse 4s ease-in-out infinite;
+            transform: rotate(45deg) translateZ(0);
+            animation: logoRotate 8s linear infinite, logoGradient 4s ease infinite, logoGlow 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 204, 0.3));
         }
 
         .logo-icon::after {
@@ -234,8 +241,32 @@
             color: white;
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 900;
-            font-size: 1.4rem;
+            font-size: 1.8rem;
+            z-index: 2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            animation: logoTextGlow 2s ease-in-out infinite alternate;
+        }
+
+        .logo-icon .inner-ring {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            border-top-color: var(--accent);
+            border-right-color: var(--primary);
+            transform: rotate(45deg);
+            animation: logoRing 3s linear infinite;
             z-index: 1;
+        }
+
+        .logo-icon .outer-ring {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            animation: logoOuterRing 4s ease-in-out infinite;
         }
 
         .logo-text {
@@ -244,26 +275,80 @@
             color: white;
             text-transform: uppercase;
             letter-spacing: 1px;
-            background: linear-gradient(to right, var(--accent), var(--primary));
+            background: linear-gradient(to right, #fff 30%, var(--accent) 70%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            position: relative;
+            overflow: hidden;
         }
 
-        .logo-text span {
+        .logo-text::after {
+            content: '.Dev';
             color: var(--primary);
+            background: none;
+            -webkit-background-clip: initial;
+            background-clip: initial;
         }
 
-        @keyframes logoPulse {
+        .logo-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: logoTextShine 3s ease-in-out infinite;
+        }
+
+        @keyframes logoRotate {
+            0% { transform: rotate(45deg) translateZ(0); }
+            100% { transform: rotate(405deg) translateZ(0); }
+        }
+
+        @keyframes logoGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes logoGlow {
             0%, 100% { 
-                transform: rotate(45deg) scale(1);
-                opacity: 0.8;
+                filter: drop-shadow(0 0 10px rgba(255, 0, 204, 0.3));
+                opacity: 0.9;
             }
             50% { 
-                transform: rotate(45deg) scale(1.1);
+                filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
                 opacity: 1;
-                box-shadow: 0 0 20px var(--primary);
             }
+        }
+
+        @keyframes logoTextGlow {
+            0% { text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); }
+            100% { text-shadow: 0 2px 15px rgba(0, 255, 255, 0.7); }
+        }
+
+        @keyframes logoRing {
+            0% { transform: rotate(45deg); }
+            100% { transform: rotate(405deg); }
+        }
+
+        @keyframes logoOuterRing {
+            0%, 100% { 
+                transform: scale(1); 
+                opacity: 0.5;
+                border-color: rgba(0, 255, 255, 0.3);
+            }
+            50% { 
+                transform: scale(1.1); 
+                opacity: 0.8;
+                border-color: rgba(255, 0, 204, 0.5);
+            }
+        }
+
+        @keyframes logoTextShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         /* --- NAVBAR --- */
@@ -727,14 +812,16 @@
             font-size: 0.9rem;
         }
 
-        /* --- GLASS CARDS --- */
+        /* --- GRID FOR PROJECTS --- */
         .grid-3 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 30px;
             margin-top: 50px;
+            width: 100%;
         }
 
+        /* --- GLASS CARDS --- */
         .glass-card {
             background: var(--glass);
             border: 1px solid var(--glass-border);
@@ -747,6 +834,9 @@
             position: relative;
             overflow: hidden;
             height: 100%;
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
         }
 
         .glass-card::before {
@@ -775,6 +865,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            flex: 1;
         }
 
         .card-icon { 
@@ -1136,9 +1227,15 @@
         }
 
         /* --- Mobile Responsive --- */
+        @media (max-width: 1100px) {
+            .grid-3 {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+        }
+
         @media (max-width: 1024px) {
             .grid-3, .features-grid { 
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
             }
         }
 
@@ -1163,6 +1260,10 @@
 
             .hero {
                 padding-top: 100px;
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -1202,6 +1303,11 @@
                 text-align: center;
                 justify-content: center;
             }
+
+            .glass-card {
+                min-height: 400px;
+                padding: 25px 20px;
+            }
         }
 
         /* --- Accessibility --- */
@@ -1217,7 +1323,15 @@
                 opacity: 0.5;
             }
             
+            .logo-icon::before,
+            .logo-icon .inner-ring,
+            .logo-icon .outer-ring,
+            .logo-text::before {
+                animation: none;
+            }
+            
             .logo-icon::before {
+                background: var(--gradient-main);
                 animation: none;
             }
         }
@@ -1797,21 +1911,53 @@
             const { showToast } = useToast();
             
             useLayoutEffect(() => {
-                gsap.registerPlugin(ScrollTrigger);
-                const ctx = gsap.context(() => {
-                    gsap.from(".glass-card", {
-                        y: 100, 
-                        opacity: 0, 
-                        duration: 0.8, 
-                        stagger: 0.2,
-                        scrollTrigger: { 
-                            trigger: sectionRef.current, 
-                            start: "top 75%",
-                            once: true
-                        }
-                    });
-                }, sectionRef);
-                return () => ctx.revert();
+                // Simple animation without GSAP dependency
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                const cards = entry.target.querySelectorAll('.glass-card');
+                                cards.forEach((card, index) => {
+                                    card.style.transitionDelay = `${index * 0.2}s`;
+                                    card.style.opacity = '1';
+                                    card.style.transform = 'translateY(0)';
+                                });
+                            }
+                        });
+                    },
+                    { threshold: 0.1 }
+                );
+                
+                if (sectionRef.current) {
+                    observer.observe(sectionRef.current);
+                }
+                
+                // Initialize GSAP if available
+                if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                    try {
+                        gsap.registerPlugin(ScrollTrigger);
+                        gsap.from(".glass-card", {
+                            y: 50,
+                            opacity: 0,
+                            duration: 0.8,
+                            stagger: 0.2,
+                            ease: "power2.out",
+                            scrollTrigger: {
+                                trigger: sectionRef.current,
+                                start: "top 80%",
+                                toggleActions: "play none none none"
+                            }
+                        });
+                    } catch (error) {
+                        console.log('GSAP animation skipped');
+                    }
+                }
+                
+                return () => {
+                    if (sectionRef.current) {
+                        observer.unobserve(sectionRef.current);
+                    }
+                };
             }, []);
 
             const handleResumeDownload = () => {
@@ -1823,11 +1969,16 @@
             };
 
             return (
-                <section id="projects" ref={sectionRef}>
+                <section id="projects" ref={sectionRef} style={{position: 'relative', zIndex: 1}}>
                     <div className="container">
-                        <h2 style={{fontSize: 'clamp(2rem, 5vw, 3rem)', textAlign: 'center', marginBottom: '50px'}}>
+                        <h2 style={{
+                            fontSize: 'clamp(2rem, 5vw, 3rem)', 
+                            textAlign: 'center', 
+                            marginBottom: '50px'
+                        }}>
                             Featured <span className="gradient-text">Projects</span>
                         </h2>
+                        
                         <div className="grid-3">
                             {/* Weather App Project */}
                             <TiltCard>
@@ -2130,8 +2281,11 @@
                 <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
                     <div className="container nav-content">
                         <a href="#home" className="logo-container" onClick={closeMobileMenu}>
-                            <div className="logo-icon"></div>
-                            <span className="logo-text">Priyansh<span>.Dev</span></span>
+                            <div className="logo-icon">
+                                <div className="inner-ring"></div>
+                                <div className="outer-ring"></div>
+                            </div>
+                            <span className="logo-text">Priyansh</span>
                         </a>
                         
                         <ul className="nav-links">
@@ -2202,16 +2356,18 @@
             const titleRef = useRef(null);
             
             useLayoutEffect(() => {
-                gsap.registerPlugin(ScrollTrigger);
-                const ctx = gsap.context(() => {
-                    gsap.from(titleRef.current, { 
-                        y: 100, 
-                        opacity: 0, 
-                        duration: 1.5, 
-                        ease: "power4.out" 
-                    });
-                }, titleRef);
-                return () => ctx.revert();
+                if (typeof gsap !== 'undefined') {
+                    try {
+                        gsap.from(titleRef.current, { 
+                            y: 100, 
+                            opacity: 0, 
+                            duration: 1.5, 
+                            ease: "power4.out" 
+                        });
+                    } catch (error) {
+                        console.log('GSAP animation skipped for hero');
+                    }
+                }
             }, []);
             
             return (
