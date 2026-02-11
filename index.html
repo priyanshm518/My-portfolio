@@ -1876,7 +1876,7 @@
             );
         };
 
-        // --- COMPONENT: TIMELINE ---
+        // --- COMPONENT: TIMELINE (UPDATED WITH INTERNSHIPS) ---
         const Timeline = () => (
             <section id="timeline">
                 <div className="container">
@@ -1884,25 +1884,55 @@
                         Education <span className="gradient-text">& Journey</span>
                     </h2>
                     <div className="timeline-container">
+                        {/* Current Education - 2026 */}
                         <div className="timeline-item">
                             <div className="timeline-date">2026 - Present</div>
                             <div className="timeline-content">
                                 <h3>Diploma in Information Technology</h3>
-                                <p style={{color: 'var(--accent)', marginBottom: '10px'}}>Government Polytechnic, Mahuva</p>
-                                <p>Current CGPA: 7/10</p>
-                                <p>Focus on Web Development, Database Management, and Software Engineering</p>
+                                <p style={{color: 'var(--accent)', marginBottom: '10px'}}>Gyanmanjari Innovative Universty, Mahuva</p>
+                                <p>Current CGPA: 7.1/10</p>
+                                <p>Final Year Project: Advanced Web Application Development</p>
+                                <p>Focus on Full Stack Development and Modern Web Technologies </p>
                             </div>
                         </div>
+                        
+                        {/* Current Internship - 2026 */}
                         <div className="timeline-item">
-                            <div className="timeline-date">2024 - Present</div>
+                            <div className="timeline-date">2026 (Current)</div>
                             <div className="timeline-content">
-                                <h3>Freelance Web Developer</h3>
-                                <p style={{color: 'var(--accent)', marginBottom: '10px'}}>Vibe Coder & Full Stack Developer</p>
-                                <p>Building responsive websites and web applications</p>
-                                <p>Deploying projects live with Vercel for instant results</p>
+                                <h3>Web Development Internship</h3>
+                                <p style={{color: 'var(--accent)', marginBottom: '10px'}}>Full Stack Developer Intern</p>
+                                <p>Working on real-world web applications using React and Node.js</p>
+                                <p>Collaborating with professional development teams</p>
+                                <p>Gaining industry experience in modern web technologies</p>
+                            </div>
+                        </div>
+                        
+                        {/* 2025 Internship */}
+                        <div className="timeline-item">
+                            <div className="timeline-date">2025</div>
+                            <div className="timeline-content">
+                                <h3>Python Internship</h3>
+                                <p style={{color: 'var(--accent)', marginBottom: '10px'}}>Python Developer Intern</p>
+                                <p>Learned Python Basics</p>
+                                <p>Learned modern UI/UX design principles</p>
+                                <p>Gained experience with version control and collaborative development</p>
+                            </div>
+                        </div>
+                        
+                        {/* 2024 Journey */}
+                        <div className="timeline-item">
+                            <div className="timeline-date">2024</div>
+                            <div className="timeline-content">
+                                <h3>Advanced Learning </h3>
+                                <p style={{color: 'var(--accent)', marginBottom: '10px'}}>Vibe Coder </p>
+                                <p>Learned PHP and MySQL for backend development</p>
+                                <p>Deployed projects live with Vercel for instant results</p>
                                 <p>Using VS Code + AI tools for enhanced productivity</p>
                             </div>
                         </div>
+                        
+                        {/* 2023 Start */}
                         <div className="timeline-item">
                             <div className="timeline-date">2023</div>
                             <div className="timeline-content">
@@ -1911,151 +1941,162 @@
                                 <p>Started learning HTML, CSS, and JavaScript fundamentals</p>
                                 <p>Completed online courses in web development</p>
                                 <p>Fell in love with creating digital experiences</p>
+                                <p>Discovered passion for problem-solving through code</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
         );
-
-        // --- COMPONENT: PROJECTS (UPDATED WITH PORTFOLIO) ---
-        const Projects = () => {
-            const sectionRef = useRef(null);
-            const { showToast } = useToast();
-            
-            useLayoutEffect(() => {
-                // Simple animation without GSAP dependency
-                const observer = new IntersectionObserver(
-                    (entries) => {
-                        entries.forEach((entry) => {
-                            if (entry.isIntersecting) {
-                                const cards = entry.target.querySelectorAll('.glass-card');
-                                cards.forEach((card, index) => {
-                                    card.style.transitionDelay = `${index * 0.2}s`;
-                                    card.style.opacity = '1';
-                                    card.style.transform = 'translateY(0)';
-                                });
-                            }
+// --- COMPONENT: PROJECTS (UPDATED WITH PORTFOLIO) ---
+const Projects = () => {
+    const sectionRef = useRef(null);
+    const { showToast } = useToast();
+    
+    useLayoutEffect(() => {
+        // Simple animation without GSAP dependency
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const cards = entry.target.querySelectorAll('.glass-card');
+                        cards.forEach((card, index) => {
+                            card.style.transitionDelay = `${index * 0.2}s`;
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
                         });
-                    },
-                    { threshold: 0.1 }
-                );
-                
-                if (sectionRef.current) {
-                    observer.observe(sectionRef.current);
-                }
-                
-                return () => {
-                    if (sectionRef.current) {
-                        observer.unobserve(sectionRef.current);
                     }
-                };
-            }, []);
+                });
+            },
+            { threshold: 0.1 }
+        );
+        
+        if (sectionRef.current) {
+            observer.observe(sectionRef.current);
+        }
+        
+        return () => {
+            if (sectionRef.current) {
+                observer.unobserve(sectionRef.current);
+            }
+        };
+    }, []);
 
-            const handleResumeDownload = () => {
-                showToast('Resume download started! Check your downloads folder.', 'success');
-            };
+    const handleResumeDownload = () => {
+        showToast('Resume download started! Check your downloads folder.', 'success');
+    };
 
-            const handleProjectClick = (projectName) => {
-                showToast(`Opening ${projectName}...`, 'info');
-            };
+    const handleProjectClick = (projectName) => {
+        showToast(`Opening ${projectName}...`, 'info');
+    };
 
-            const projects = [
-                {
-                    title: "Weather Forecast App",
-                    icon: "fa-cloud-sun",
-                    description: "A modern weather application with real-time forecasts, location detection, and beautiful UI. Features interactive maps, temperature charts, and multi-day forecasts with responsive design.",
-                    tags: ["React", "API Integration", "CSS3", "JavaScript", "Vercel"],
-                    github: "https://github.com/priyanshm518/weather-app",
-                    liveDemo: "https://weather-app-priyansh.vercel.app"
-                },
-                {
-                    title: "Car Selling Platform",
-                    icon: "fa-car",
-                    description: "A complete e-commerce platform for selling cars with user authentication, advanced search filters, admin dashboard, and payment gateway integration. Fully responsive with modern UI.",
-                    tags: ["PHP", "MySQL", "Bootstrap", "JavaScript", "Vercel"],
-                    github: "https://github.com/priyanshm518/citytaxi",
-                    liveDemo: "https://citytaxi.vercel.app"
-                },
-                {
-                    title: "Portfolio Website",
-                    icon: "fa-laptop-code",
-                    description: "This very portfolio! Built with React, Three.js, and modern web technologies. Features 3D background, interactive elements, responsive design, and smooth animations.",
-                    tags: ["React", "Three.js", "JavaScript", "CSS3", "Vercel"],
-                    github: "https://github.com/priyanshm518/portfolio",
-                    liveDemo: "https://priyanshm518.github.io"
-                },
-                {
-                    title: "My Resume",
-                    icon: "fa-file-pdf",
-                    description: "Download my comprehensive resume to view my complete education, skills, project experience, and professional qualifications in a well-formatted PDF document.",
-                    tags: ["PDF Download", "Detailed CV", "Professional"],
-                    isResume: true
-                }
-            ];
+    const projects = [
+        {
+            title: "Weather Forecast App",
+            icon: "fa-cloud-sun",
+            description: "A modern weather application with real-time forecasts, location detection, and beautiful UI. Features interactive maps, temperature charts, and multi-day forecasts with responsive design.",
+            tags: ["React", "API Integration", "CSS3", "JavaScript", "Vercel"],
+            github: "https://github.com/priyanshm518/weather-app.git",
+            liveDemo: "https://weather-app-vert-psi-10.vercel.app/",
+            hasDemo: true
+        },
+        {
+            title: "Car Selling Platform",
+            icon: "fa-car",
+            description: "A complete e-commerce platform for selling cars with user authentication, advanced search filters, admin dashboard, and payment gateway integration. Fully responsive with modern UI.",
+            tags: ["PHP", "MySQL", "Bootstrap", "JavaScript"],
+            github: "https://github.com/priyanshm518/citytaxi.git",
+            hasDemo: false
+        },
+        {
+            title: "Portfolio Website",
+            icon: "fa-laptop-code",
+            description: "This very portfolio! Built with React, Three.js, and modern web technologies. Features 3D background, interactive elements, responsive design, and smooth animations.",
+            tags: ["React", "Three.js", "JavaScript", "CSS3", "Vercel"],
+            github: "https://github.com/priyanshm518/My-portfolio.git",
+            liveDemo: "https://my-portfolio-lake-xi-9ctckslcwb.vercel.app/",
+            hasDemo: true
+        },
+        {
+            title: "My Resume",
+            icon: "fa-file-pdf",
+            description: "Download my comprehensive resume to view my complete education, skills, project experience, and professional qualifications in a well-formatted PDF document.",
+            tags: ["PDF Download", "Detailed CV", "Professional"],
+            isResume: true
+        }
+    ];
 
-            return (
-                <section id="projects" ref={sectionRef} style={{position: 'relative', zIndex: 1, background: 'rgba(5, 5, 16, 0.8)'}}>
-                    <div className="container">
-                        <h2 style={{
-                            fontSize: 'clamp(2rem, 5vw, 3rem)', 
-                            textAlign: 'center', 
-                            marginBottom: '50px'
-                        }}>
-                            Featured <span className="gradient-text">Projects</span>
-                        </h2>
-                        
-                        <div className="grid-3">
-                            {projects.map((project, index) => (
-                                <TiltCard key={index}>
-                                    <i className={`fas ${project.icon} card-icon`}></i>
-                                    <h3 className="card-title">{project.title}</h3>
-                                    <div className="tags">
-                                        {project.tags.map((tag, tagIndex) => (
-                                            <span className="tag" key={tagIndex}>{tag}</span>
-                                        ))}
-                                    </div>
-                                    <p className="card-desc">{project.description}</p>
-                                    <div className="project-links">
-                                        {project.isResume ? (
+    return (
+        <section id="projects" ref={sectionRef} style={{position: 'relative', zIndex: 1, background: 'rgba(5, 5, 16, 0.8)'}}>
+            <div className="container">
+                <h2 style={{
+                    fontSize: 'clamp(2rem, 5vw, 3rem)', 
+                    textAlign: 'center', 
+                    marginBottom: '50px'
+                }}>
+                    Featured <span className="gradient-text">Projects</span>
+                </h2>
+                
+                <div className="grid-3">
+                    {projects.map((project, index) => (
+                        <TiltCard key={index}>
+                            <i className={`fas ${project.icon} card-icon`}></i>
+                            <h3 className="card-title">{project.title}</h3>
+                            <div className="tags">
+                                {project.tags.map((tag, tagIndex) => (
+                                    <span className="tag" key={tagIndex}>{tag}</span>
+                                ))}
+                            </div>
+                            <p className="card-desc">{project.description}</p>
+                            <div className="project-links">
+                                {project.isResume ? (
+                                    <a 
+                                        href="Priyansh_Resume.pdf" 
+                                        download="Priyansh_Makwana_Resume.pdf"
+                                        className="project-link primary"
+                                        onClick={handleResumeDownload}
+                                        style={{width: '100%', justifyContent: 'center'}}
+                                    >
+                                        <i className="fas fa-download"></i> Download Resume
+                                    </a>
+                                ) : (
+                                    <div style={{
+                                        display: 'flex',
+                                        gap: '15px',
+                                        width: '100%',
+                                        justifyContent: project.hasDemo ? 'space-between' : 'center'
+                                    }}>
+                                        <a 
+                                            href={project.github} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer nofollow"
+                                            className="project-link secondary"
+                                            onClick={() => handleProjectClick(project.title)}
+                                            style={!project.hasDemo ? {flex: '1', maxWidth: '250px'} : {}}
+                                        >
+                                            <i className="fab fa-github"></i> View Code
+                                        </a>
+                                        {project.hasDemo && (
                                             <a 
-                                                href="Priyansh_Resume.pdf" 
-                                                download="Priyansh_Makwana_Resume.pdf"
+                                                href={project.liveDemo} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer nofollow"
                                                 className="project-link primary"
-                                                onClick={handleResumeDownload}
+                                                onClick={() => handleProjectClick(project.title)}
                                             >
-                                                <i className="fas fa-download"></i> Download Resume
+                                                <i className="fas fa-external-link-alt"></i> See Demo
                                             </a>
-                                        ) : (
-                                            <>
-                                                <a 
-                                                    href={project.github} 
-                                                    target="_blank" 
-                                                    rel="noopener noreferrer nofollow"
-                                                    className="project-link secondary"
-                                                    onClick={() => handleProjectClick(project.title)}
-                                                >
-                                                    <i className="fab fa-github"></i> View Code
-                                                </a>
-                                                <a 
-                                                    href={project.liveDemo} 
-                                                    target="_blank" 
-                                                    rel="noopener noreferrer nofollow"
-                                                    className="project-link primary"
-                                                    onClick={() => handleProjectClick(project.title)}
-                                                >
-                                                    <i className="fas fa-external-link-alt"></i> See Demo
-                                                </a>
-                                            </>
                                         )}
                                     </div>
-                                </TiltCard>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            );
-        };
+                                )}
+                            </div>
+                        </TiltCard>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+};
 
         // --- COMPONENT: CONTACT FORM WITH WHATSAPP ---
         const ContactForm = () => {
@@ -2404,6 +2445,7 @@
                                     "Building cool stuff with React & PHP.",
                                     "Deploying live projects on Vercel.",
                                     "VS Code + AI Tools = 🚀",
+                                    "Currently interning as Web Developer.",
                                     "Creating digital experiences with passion."
                                 ]} 
                                 speed={50}
@@ -2450,10 +2492,10 @@
                             perfectly but also feel amazing to use.
                         </p>
                         <p style={{marginBottom: '20px', fontSize: '1.1rem'}}>
+                            Currently pursuing my Diploma in IT while interning as a Web Developer, 
+                            I've gained hands-on experience through multiple internships in 2025 and 2026. 
                             My toolkit includes React, PHP, Three.js, and modern development practices. 
-                            I love creating responsive web applications with clean code and optimal performance. 
-                            When I'm not coding, you'll find me exploring new tech, learning about AI tools, 
-                            or jamming to music while brainstorming my next project.
+                            I love creating responsive web applications with clean code and optimal performance.
                         </p>
                         <p style={{marginBottom: '40px', fontSize: '1.1rem'}}>
                             I deploy all my projects live with <span style={{color: 'var(--accent)'}}>Vercel</span> for instant results, 
@@ -2468,11 +2510,15 @@
                                 <p>Active Projects</p>
                             </div>
                             <div style={{textAlign: 'center', padding: '25px', background: 'var(--glass)', borderRadius: '15px', minWidth: '160px'}}>
-                                <h3 style={{color: 'var(--accent)', fontSize: '2.5rem', marginBottom: '10px'}}>100%</h3>
-                                <p>Vercel Live Deployments</p>
+                                <h3 style={{color: 'var(--accent)', fontSize: '2.5rem', marginBottom: '10px'}}>2</h3>
+                                <p>Internships</p>
                             </div>
                             <div style={{textAlign: 'center', padding: '25px', background: 'var(--glass)', borderRadius: '15px', minWidth: '160px'}}>
-                                <h3 style={{color: '#fff', fontSize: '2.5rem', marginBottom: '10px'}}>∞</h3>
+                                <h3 style={{color: '#fff', fontSize: '2.5rem', marginBottom: '10px'}}>100%</h3>
+                                <p>Vercel Deployments</p>
+                            </div>
+                            <div style={{textAlign: 'center', padding: '25px', background: 'var(--glass)', borderRadius: '15px', minWidth: '160px'}}>
+                                <h3 style={{color: 'var(--primary)', fontSize: '2.5rem', marginBottom: '10px'}}>∞</h3>
                                 <p>Coding Enthusiasm</p>
                             </div>
                         </div>
