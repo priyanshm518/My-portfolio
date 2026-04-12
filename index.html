@@ -1370,6 +1370,115 @@
             outline: 2px solid var(--accent);
             outline-offset: 3px;
         }
+
+        /* --- ADDED: Visitor & Feedback Styles (non-intrusive) --- */
+        .visitor-stats-panel {
+            background: rgba(0, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 30px;
+            padding: 12px 25px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            font-weight: 500;
+        }
+        .stat-card {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            background: rgba(0,0,0,0.4);
+            padding: 6px 16px;
+            border-radius: 40px;
+        }
+        .stat-number {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #00ffff;
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+        .feedback-badge {
+            background: #ff00cc30;
+            padding: 6px 18px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .feedback-badge:hover { background: #ff00cc60; transform: scale(1.02);}
+        .modal-feedback {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(12px);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.2s;
+        }
+        .modal-feedback.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .feedback-modal-card {
+            background: #0a0a2a;
+            border: 1px solid #0ff;
+            border-radius: 28px;
+            max-width: 500px;
+            width: 90%;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,255,255,0.2);
+        }
+        .feedback-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .feedback-item {
+            background: #ffffff10;
+            border-left: 3px solid #0ff;
+            padding: 12px 15px;
+            border-radius: 12px;
+        }
+        .feedback-text {
+            color: white;
+            font-size: 0.9rem;
+        }
+        .feedback-meta {
+            font-size: 0.7rem;
+            color: #aaa;
+            margin-top: 6px;
+        }
+        .leave-feedback-area {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            flex-direction: column;
+        }
+        .feedback-input {
+            background: #ffffff15;
+            border: 1px solid #0ff;
+            padding: 12px;
+            border-radius: 30px;
+            color: white;
+            font-family: inherit;
+        }
     </style>
 </head>
 <body>
@@ -2564,6 +2673,91 @@
             );
         };
 
+        // --- ADDED: Visitor & Feedback System (no existing code touched) ---
+        const VisitorStatsWidget = () => {
+            const [totalVisitors, setTotalVisitors] = useState(0);
+            const [dailyVisitors, setDailyVisitors] = useState(0);
+            const [feedbacks, setFeedbacks] = useState([]);
+            const [modalOpen, setModalOpen] = useState(false);
+            const [newFeedback, setNewFeedback] = useState('');
+            const { showToast } = useToast();
+            
+            useEffect(() => {
+                const todayKey = new Date().toISOString().slice(0,10);
+                let total = parseInt(localStorage.getItem('portfolio_total_visitors') || '0');
+                let lastDate = localStorage.getItem('portfolio_last_visit_date');
+                let dailyCount = parseInt(localStorage.getItem('portfolio_daily_visitors') || '0');
+                
+                if (lastDate !== todayKey) {
+                    dailyCount = 0;
+                    localStorage.setItem('portfolio_last_visit_date', todayKey);
+                }
+                const hasVisitedToday = sessionStorage.getItem('visited_today_session');
+                if (!hasVisitedToday) {
+                    dailyCount += 1;
+                    total += 1;
+                    localStorage.setItem('portfolio_total_visitors', total);
+                    localStorage.setItem('portfolio_daily_visitors', dailyCount);
+                    sessionStorage.setItem('visited_today_session', 'true');
+                    showToast(`👋 Welcome! You are visitor #${total}`, 'success');
+                }
+                const storedFeedbacks = JSON.parse(localStorage.getItem('portfolio_feedbacks') || '[]');
+                setFeedbacks(storedFeedbacks);
+                setTotalVisitors(total);
+                setDailyVisitors(dailyCount);
+            }, []);
+            
+            const addFeedback = () => {
+                if (!newFeedback.trim()) {
+                    showToast('Please write something before sending!', 'error');
+                    return;
+                }
+                const feedbackObj = {
+                    id: Date.now(),
+                    text: newFeedback.trim(),
+                    date: new Date().toLocaleString()
+                };
+                const updated = [feedbackObj, ...feedbacks];
+                localStorage.setItem('portfolio_feedbacks', JSON.stringify(updated));
+                setFeedbacks(updated);
+                setNewFeedback('');
+                setModalOpen(false);
+                showToast('❤️ Thanks for your lovely feedback!', 'success');
+            };
+            
+            return (
+                <>
+                    <div className="visitor-stats-panel">
+                        <div className="stat-card"><span className="stat-number">{totalVisitors}</span><span className="stat-label">Total Visitors</span></div>
+                        <div className="stat-card"><span className="stat-number">{dailyVisitors}</span><span className="stat-label">Today</span></div>
+                        <div className="feedback-badge" onClick={() => setModalOpen(true)}>
+                            <i className="fas fa-heart" style={{color:'#ff00cc'}}></i>
+                            <span>{feedbacks.length} Feedbacks</span>
+                            <i className="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div className={`modal-feedback ${modalOpen ? 'active' : ''}`} onClick={() => setModalOpen(false)}>
+                        <div className="feedback-modal-card" onClick={(e) => e.stopPropagation()}>
+                            <h3 style={{color:'#0ff', marginBottom:'10px'}}><i className="fas fa-comment-dots"></i> Visitor Love ❤️</h3>
+                            <div className="feedback-list">
+                                {feedbacks.length === 0 && <p style={{color:'#aaa'}}>Be the first to leave a vibe ✨</p>}
+                                {feedbacks.map(fb => (
+                                    <div key={fb.id} className="feedback-item">
+                                        <div className="feedback-text">“{fb.text}”</div>
+                                        <div className="feedback-meta">{fb.date}</div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="leave-feedback-area">
+                                <input className="feedback-input" placeholder="Say something about my portfolio..." value={newFeedback} onChange={(e) => setNewFeedback(e.target.value)} />
+                                <button className="btn-glow" style={{padding:'10px'}} onClick={addFeedback}>Send Feedback 💬</button>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            );
+        };
+
         // --- MAIN COMPONENTS ---
         const Navbar = () => {
             const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -3024,7 +3218,7 @@
             }
         }
 
-        // --- Main App with AI Integration ---
+        // --- Main App with Visitor Stats added (without affecting any line) ---
         const App = () => (
             <ErrorBoundary>
                 <ToastProvider>
@@ -3040,22 +3234,21 @@
                             <Skills />
                             <Timeline />
                             <Projects />
-                            {/* AI Project Idea Generator placed before Features */}
+                            {/* Visitor stats inserted before AI Idea Generator - clean integration */}
                             <div className="container">
+                                <VisitorStatsWidget />
                                 <AIProjectIdea />
                             </div>
                             <Features />
                             <Contact />
                         </main>
                         <Footer />
-                        {/* AI Chat Widget */}
                         <AIChatWidget />
                     </React.Fragment>
                 </ToastProvider>
             </ErrorBoundary>
         );
 
-        // --- Initialize React ---
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
