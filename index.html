@@ -1884,7 +1884,6 @@
                         Education <span className="gradient-text">& Journey</span>
                     </h2>
                     <div className="timeline-container">
-                        {/* Current Education - 2026 */}
                         <div className="timeline-item">
                             <div className="timeline-date">2026 - Present</div>
                             <div className="timeline-content">
@@ -1896,7 +1895,6 @@
                             </div>
                         </div>
                         
-                        {/* Current Internship - 2026 */}
                         <div className="timeline-item">
                             <div className="timeline-date">2026 (Current)</div>
                             <div className="timeline-content">
@@ -1908,7 +1906,6 @@
                             </div>
                         </div>
                         
-                        {/* 2025 Internship */}
                         <div className="timeline-item">
                             <div className="timeline-date">2025</div>
                             <div className="timeline-content">
@@ -1920,7 +1917,6 @@
                             </div>
                         </div>
                         
-                        {/* 2024 Journey */}
                         <div className="timeline-item">
                             <div className="timeline-date">2024</div>
                             <div className="timeline-content">
@@ -1932,7 +1928,6 @@
                             </div>
                         </div>
                         
-                        {/* 2023 Start */}
                         <div className="timeline-item">
                             <div className="timeline-date">2023</div>
                             <div className="timeline-content">
@@ -1948,155 +1943,155 @@
                 </div>
             </section>
         );
-// --- COMPONENT: PROJECTS (UPDATED WITH PORTFOLIO) ---
-const Projects = () => {
-    const sectionRef = useRef(null);
-    const { showToast } = useToast();
-    
-    useLayoutEffect(() => {
-        // Simple animation without GSAP dependency
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const cards = entry.target.querySelectorAll('.glass-card');
-                        cards.forEach((card, index) => {
-                            card.style.transitionDelay = `${index * 0.2}s`;
-                            card.style.opacity = '1';
-                            card.style.transform = 'translateY(0)';
+
+        // --- COMPONENT: PROJECTS ---
+        const Projects = () => {
+            const sectionRef = useRef(null);
+            const { showToast } = useToast();
+            
+            useLayoutEffect(() => {
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                const cards = entry.target.querySelectorAll('.glass-card');
+                                cards.forEach((card, index) => {
+                                    card.style.transitionDelay = `${index * 0.2}s`;
+                                    card.style.opacity = '1';
+                                    card.style.transform = 'translateY(0)';
+                                });
+                            }
                         });
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
-        
-        if (sectionRef.current) {
-            observer.observe(sectionRef.current);
-        }
-        
-        return () => {
-            if (sectionRef.current) {
-                observer.unobserve(sectionRef.current);
-            }
-        };
-    }, []);
-
-    const handleResumeDownload = () => {
-        showToast('Resume download started! Check your downloads folder.', 'success');
-    };
-
-    const handleProjectClick = (projectName) => {
-        showToast(`Opening ${projectName}...`, 'info');
-    };
-
-    const projects = [
-        {
-            title: "Weather Forecast App",
-            icon: "fa-cloud-sun",
-            description: "A modern weather application with real-time forecasts, location detection, and beautiful UI. Features interactive maps, temperature charts, and multi-day forecasts with responsive design.",
-            tags: ["React", "API Integration", "CSS3", "JavaScript", "Vercel"],
-            github: "https://github.com/priyanshm518/weather-app.git",
-            liveDemo: "https://weather-app-vert-psi-10.vercel.app/",
-            hasDemo: true
-        },
-        {
-            title: "Car Selling Platform",
-            icon: "fa-car",
-            description: "A complete e-commerce platform for selling cars with user authentication, advanced search filters, admin dashboard, and payment gateway integration. Fully responsive with modern UI.",
-            tags: ["PHP", "MySQL", "Bootstrap", "JavaScript"],
-            github: "https://github.com/priyanshm518/citytaxi.git",
-            hasDemo: false
-        },
-        {
-            title: "Portfolio Website",
-            icon: "fa-laptop-code",
-            description: "This very portfolio! Built with React, Three.js, and modern web technologies. Features 3D background, interactive elements, responsive design, and smooth animations.",
-            tags: ["React", "Three.js", "JavaScript", "CSS3", "Vercel"],
-            github: "https://github.com/priyanshm518/My-portfolio.git",
-            liveDemo: "https://my-portfolio-lake-xi-9ctckslcwb.vercel.app/",
-            hasDemo: true
-        },
-        {
-            title: "My Resume",
-            icon: "fa-file-pdf",
-            description: "Download my comprehensive resume to view my complete education, skills, project experience, and professional qualifications in a well-formatted PDF document.",
-            tags: ["PDF Download", "Detailed CV", "Professional"],
-            isResume: true
-        }
-    ];
-
-    return (
-        <section id="projects" ref={sectionRef} style={{position: 'relative', zIndex: 1, background: 'rgba(5, 5, 16, 0.8)'}}>
-            <div className="container">
-                <h2 style={{
-                    fontSize: 'clamp(2rem, 5vw, 3rem)', 
-                    textAlign: 'center', 
-                    marginBottom: '50px'
-                }}>
-                    Featured <span className="gradient-text">Projects</span>
-                </h2>
+                    },
+                    { threshold: 0.1 }
+                );
                 
-                <div className="grid-3">
-                    {projects.map((project, index) => (
-                        <TiltCard key={index}>
-                            <i className={`fas ${project.icon} card-icon`}></i>
-                            <h3 className="card-title">{project.title}</h3>
-                            <div className="tags">
-                                {project.tags.map((tag, tagIndex) => (
-                                    <span className="tag" key={tagIndex}>{tag}</span>
-                                ))}
-                            </div>
-                            <p className="card-desc">{project.description}</p>
-                            <div className="project-links">
-                                {project.isResume ? (
-                                    <a 
-                                        href="Priyansh_Resume.pdf" 
-                                        download="Priyansh_Makwana_Resume.pdf"
-                                        className="project-link primary"
-                                        onClick={handleResumeDownload}
-                                        style={{width: '100%', justifyContent: 'center'}}
-                                    >
-                                        <i className="fas fa-download"></i> Download Resume
-                                    </a>
-                                ) : (
-                                    <div style={{
-                                        display: 'flex',
-                                        gap: '15px',
-                                        width: '100%',
-                                        justifyContent: project.hasDemo ? 'space-between' : 'center'
-                                    }}>
-                                        <a 
-                                            href={project.github} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer nofollow"
-                                            className="project-link secondary"
-                                            onClick={() => handleProjectClick(project.title)}
-                                            style={!project.hasDemo ? {flex: '1', maxWidth: '250px'} : {}}
-                                        >
-                                            <i className="fab fa-github"></i> View Code
-                                        </a>
-                                        {project.hasDemo && (
+                if (sectionRef.current) {
+                    observer.observe(sectionRef.current);
+                }
+                
+                return () => {
+                    if (sectionRef.current) {
+                        observer.unobserve(sectionRef.current);
+                    }
+                };
+            }, []);
+
+            const handleResumeDownload = () => {
+                showToast('Resume download started! Check your downloads folder.', 'success');
+            };
+
+            const handleProjectClick = (projectName) => {
+                showToast(`Opening ${projectName}...`, 'info');
+            };
+
+            const projects = [
+                {
+                    title: "Weather Forecast App",
+                    icon: "fa-cloud-sun",
+                    description: "A modern weather application with real-time forecasts, location detection, and beautiful UI. Features interactive maps, temperature charts, and multi-day forecasts with responsive design.",
+                    tags: ["React", "API Integration", "CSS3", "JavaScript", "Vercel"],
+                    github: "https://github.com/priyanshm518/weather-app.git",
+                    liveDemo: "https://weather-app-vert-psi-10.vercel.app/",
+                    hasDemo: true
+                },
+                {
+                    title: "Car Selling Platform",
+                    icon: "fa-car",
+                    description: "A complete e-commerce platform for selling cars with user authentication, advanced search filters, admin dashboard, and payment gateway integration. Fully responsive with modern UI.",
+                    tags: ["PHP", "MySQL", "Bootstrap", "JavaScript"],
+                    github: "https://github.com/priyanshm518/citytaxi.git",
+                    hasDemo: false
+                },
+                {
+                    title: "Portfolio Website",
+                    icon: "fa-laptop-code",
+                    description: "This very portfolio! Built with React, Three.js, and modern web technologies. Features 3D background, interactive elements, responsive design, and smooth animations.",
+                    tags: ["React", "Three.js", "JavaScript", "CSS3", "Vercel"],
+                    github: "https://github.com/priyanshm518/My-portfolio.git",
+                    liveDemo: "https://my-portfolio-lake-xi-9ctckslcwb.vercel.app/",
+                    hasDemo: true
+                },
+                {
+                    title: "My Resume",
+                    icon: "fa-file-pdf",
+                    description: "Download my comprehensive resume to view my complete education, skills, project experience, and professional qualifications in a well-formatted PDF document.",
+                    tags: ["PDF Download", "Detailed CV", "Professional"],
+                    isResume: true
+                }
+            ];
+
+            return (
+                <section id="projects" ref={sectionRef} style={{position: 'relative', zIndex: 1, background: 'rgba(5, 5, 16, 0.8)'}}>
+                    <div className="container">
+                        <h2 style={{
+                            fontSize: 'clamp(2rem, 5vw, 3rem)', 
+                            textAlign: 'center', 
+                            marginBottom: '50px'
+                        }}>
+                            Featured <span className="gradient-text">Projects</span>
+                        </h2>
+                        
+                        <div className="grid-3">
+                            {projects.map((project, index) => (
+                                <TiltCard key={index}>
+                                    <i className={`fas ${project.icon} card-icon`}></i>
+                                    <h3 className="card-title">{project.title}</h3>
+                                    <div className="tags">
+                                        {project.tags.map((tag, tagIndex) => (
+                                            <span className="tag" key={tagIndex}>{tag}</span>
+                                        ))}
+                                    </div>
+                                    <p className="card-desc">{project.description}</p>
+                                    <div className="project-links">
+                                        {project.isResume ? (
                                             <a 
-                                                href={project.liveDemo} 
-                                                target="_blank" 
-                                                rel="noopener noreferrer nofollow"
+                                                href="Priyansh_Resume.pdf" 
+                                                download="Priyansh_Makwana_Resume.pdf"
                                                 className="project-link primary"
-                                                onClick={() => handleProjectClick(project.title)}
+                                                onClick={handleResumeDownload}
+                                                style={{width: '100%', justifyContent: 'center'}}
                                             >
-                                                <i className="fas fa-external-link-alt"></i> See Demo
+                                                <i className="fas fa-download"></i> Download Resume
                                             </a>
+                                        ) : (
+                                            <div style={{
+                                                display: 'flex',
+                                                gap: '15px',
+                                                width: '100%',
+                                                justifyContent: project.hasDemo ? 'space-between' : 'center'
+                                            }}>
+                                                <a 
+                                                    href={project.github} 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer nofollow"
+                                                    className="project-link secondary"
+                                                    onClick={() => handleProjectClick(project.title)}
+                                                    style={!project.hasDemo ? {flex: '1', maxWidth: '250px'} : {}}
+                                                >
+                                                    <i className="fab fa-github"></i> View Code
+                                                </a>
+                                                {project.hasDemo && (
+                                                    <a 
+                                                        href={project.liveDemo} 
+                                                        target="_blank" 
+                                                        rel="noopener noreferrer nofollow"
+                                                        className="project-link primary"
+                                                        onClick={() => handleProjectClick(project.title)}
+                                                    >
+                                                        <i className="fas fa-external-link-alt"></i> See Demo
+                                                    </a>
+                                                )}
+                                            </div>
                                         )}
                                     </div>
-                                )}
-                            </div>
-                        </TiltCard>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-};
+                                </TiltCard>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            );
+        };
 
         // --- COMPONENT: CONTACT FORM WITH WHATSAPP ---
         const ContactForm = () => {
@@ -2147,13 +2142,11 @@ const Projects = () => {
                 setErrors({});
                 
                 try {
-                    // Send message to WhatsApp
                     const whatsappMessage = `*New Message from Portfolio Website*%0A%0A*Name:* ${formData.name}%0A*Email:* ${formData.email}%0A%0A*Message:*%0A${formData.message}%0A%0A---%0A_This message was sent from your portfolio contact form_`;
                     const whatsappUrl = `https://wa.me/919723968282?text=${whatsappMessage}`;
                     
-                    // Also send to Formspree for backup
                     const formId = 'xvoewqgo';
-                    const formspreeResponse = await fetch(`https://formspree.io/f/${formId}`, {
+                    await fetch(`https://formspree.io/f/${formId}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -2166,13 +2159,9 @@ const Projects = () => {
                         })
                     });
                     
-                    // Reset form
                     setFormData({ name: '', email: '', message: '' });
-                    
-                    // Show success message
                     showToast('Message sent successfully! Opening WhatsApp...', 'success');
                     
-                    // Open WhatsApp after a short delay
                     setTimeout(() => {
                         window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
                     }, 1500);
@@ -2180,7 +2169,6 @@ const Projects = () => {
                 } catch (error) {
                     showToast('Failed to send message. Please try WhatsApp directly.', 'error');
                     
-                    // Open WhatsApp with error message
                     const errorWhatsappMessage = `*New Message from Portfolio Website (Form Error)*%0A%0A*Name:* ${formData.name}%0A*Email:* ${formData.email}%0A%0A*Message:*%0A${formData.message}%0A%0A---%0A_Form submission failed, sending via WhatsApp directly_`;
                     const errorWhatsappUrl = `https://wa.me/919723968282?text=${errorWhatsappMessage}`;
                     
@@ -2278,6 +2266,301 @@ const Projects = () => {
                         Messages will be sent to your WhatsApp and also saved for backup
                     </p>
                 </form>
+            );
+        };
+
+        // ============================================================
+        //  PURE AI INTEGRATION MODULE (Chatbot + Idea Generator)
+        // ============================================================
+        
+        // AI Chatbot Engine
+        const getAIResponse = (userMessage) => {
+            const msg = userMessage.toLowerCase();
+            if (msg.includes('project') || msg.includes('portfolio')) {
+                return "I've built several projects like Weather App, Car Selling Platform, and this AI-powered portfolio! Check out the Projects section for live demos 🚀";
+            }
+            if (msg.includes('skill') || msg.includes('tech')) {
+                return "My tech stack includes React, PHP, Three.js, MySQL, and modern CSS. I also vibe with AI tools and Vercel deployments!";
+            }
+            if (msg.includes('contact') || msg.includes('email')) {
+                return "You can reach Priyansh at priyansh.makwana27@gmail.com or WhatsApp +91 97239 68282. I'll reply fast!";
+            }
+            if (msg.includes('internship') || msg.includes('work')) {
+                return "Priyansh is currently doing a Web Development Internship (2026) and previously completed a Python Internship in 2025. Always learning!";
+            }
+            if (msg.includes('resume')) {
+                return "You can download his resume from the Hero section or Projects tab. It's packed with experience!";
+            }
+            if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
+                return "Hey there! 👋 I'm Priyansh's AI assistant. Ask me about his skills, projects, or how to collaborate!";
+            }
+            if (msg.includes('thanks') || msg.includes('thank')) {
+                return "You're welcome! 😊 Feel free to ask anything else about Priyansh's work.";
+            }
+            return "Thanks for your message! Priyansh will get back to you soon. Meanwhile, explore the portfolio to see his amazing work ✨";
+        };
+
+        // AI Chat Widget
+        const AIChatWidget = () => {
+            const [isOpen, setIsOpen] = useState(false);
+            const [messages, setMessages] = useState([
+                { sender: 'ai', text: "Hey! I'm your AI dev assistant. Ask me about Priyansh's projects, skills, or anything portfolio-related! 💬" }
+            ]);
+            const [input, setInput] = useState('');
+            const [isTyping, setIsTyping] = useState(false);
+            const messagesEndRef = useRef(null);
+            const { showToast } = useToast();
+
+            const scrollToBottom = () => {
+                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            };
+            useEffect(() => {
+                scrollToBottom();
+            }, [messages]);
+
+            const sendMessage = async () => {
+                if (!input.trim()) return;
+                const userMsg = input.trim();
+                setMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
+                setInput('');
+                setIsTyping(true);
+                setTimeout(() => {
+                    const reply = getAIResponse(userMsg);
+                    setMessages(prev => [...prev, { sender: 'ai', text: reply }]);
+                    setIsTyping(false);
+                    if (userMsg.toLowerCase().includes('help')) {
+                        showToast("💡 Try asking about projects, skills, or contact!", "info");
+                    }
+                }, 600);
+            };
+
+            return (
+                <div style={{
+                    position: 'fixed',
+                    bottom: '30px',
+                    right: '30px',
+                    zIndex: 1000,
+                    fontFamily: "'Outfit', system-ui, sans-serif"
+                }}>
+                    <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        style={{
+                            width: '65px',
+                            height: '65px',
+                            background: 'linear-gradient(135deg, #ff00cc, #3333ff)',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            boxShadow: '0 5px 20px rgba(255,0,204,0.5)',
+                            transition: 'transform 0.2s',
+                            border: 'none',
+                            color: 'white',
+                            fontSize: '28px'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                    >
+                        <i className={`fas ${isOpen ? 'fa-times' : 'fa-robot'}`}></i>
+                    </button>
+
+                    <div style={{
+                        position: 'absolute',
+                        bottom: '80px',
+                        right: '0',
+                        width: '350px',
+                        height: '500px',
+                        background: 'rgba(5, 5, 16, 0.96)',
+                        backdropFilter: 'blur(20px)',
+                        borderRadius: '20px',
+                        border: '1px solid #00ffff',
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        overflow: 'hidden',
+                        transition: 'transform 0.2s ease, opacity 0.2s',
+                        transformOrigin: 'bottom right',
+                        transform: isOpen ? 'scale(1)' : 'scale(0)',
+                        opacity: isOpen ? 1 : 0,
+                        pointerEvents: isOpen ? 'auto' : 'none'
+                    }}>
+                        <div style={{
+                            background: 'rgba(0,255,255,0.1)',
+                            padding: '15px',
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            borderBottom: '1px solid rgba(255,255,255,0.1)'
+                        }}>
+                            <span><i className="fas fa-brain"></i> AI Dev Assistant</span>
+                            <small style={{ fontSize: '0.7rem', color: '#00ffff' }}>powered by local AI</small>
+                        </div>
+                        <div style={{
+                            flex: 1,
+                            overflowY: 'auto',
+                            padding: '15px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '12px'
+                        }}>
+                            {messages.map((msg, idx) => (
+                                <div
+                                    key={idx}
+                                    style={{
+                                        maxWidth: '85%',
+                                        padding: '10px 14px',
+                                        borderRadius: '18px',
+                                        fontSize: '0.9rem',
+                                        lineHeight: '1.4',
+                                        alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
+                                        background: msg.sender === 'user' ? 'linear-gradient(135deg, #ff00cc, #3333ff)' : 'rgba(255,255,255,0.1)',
+                                        color: msg.sender === 'user' ? 'white' : '#00ffff',
+                                        border: msg.sender === 'ai' ? '1px solid #00ffff' : 'none',
+                                        borderBottomRightRadius: msg.sender === 'user' ? '4px' : '18px',
+                                        borderBottomLeftRadius: msg.sender === 'ai' ? '4px' : '18px'
+                                    }}
+                                >
+                                    {msg.text}
+                                </div>
+                            ))}
+                            {isTyping && (
+                                <div style={{ fontSize: '0.8rem', color: '#a0a0c0', padding: '5px 12px' }}>
+                                    <i className="fas fa-spinner fa-pulse"></i> AI is thinking...
+                                </div>
+                            )}
+                            <div ref={messagesEndRef} />
+                        </div>
+                        <div style={{
+                            display: 'flex',
+                            padding: '12px',
+                            borderTop: '1px solid rgba(255,255,255,0.1)',
+                            gap: '10px'
+                        }}>
+                            <input
+                                type="text"
+                                placeholder="Ask about projects, skills..."
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                                style={{
+                                    flex: 1,
+                                    background: 'rgba(255,255,255,0.1)',
+                                    border: '1px solid rgba(255,255,255,0.2)',
+                                    borderRadius: '25px',
+                                    padding: '10px 15px',
+                                    color: 'white',
+                                    fontFamily: 'inherit',
+                                    outline: 'none'
+                                }}
+                            />
+                            <button
+                                onClick={sendMessage}
+                                style={{
+                                    background: '#00ffff',
+                                    border: 'none',
+                                    borderRadius: '50%',
+                                    width: '40px',
+                                    height: '40px',
+                                    color: '#050510',
+                                    cursor: 'pointer',
+                                    transition: '0.2s'
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                            >
+                                <i className="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // AI Project Idea Generator
+        const AIProjectIdea = () => {
+            const [idea, setIdea] = useState("");
+            const [loadingIdea, setLoadingIdea] = useState(false);
+            const { showToast } = useToast();
+
+            const projectIdeas = [
+                "🎯 AI-Powered Resume Screener: Build a tool that uses NLP to match job descriptions with resumes.",
+                "📊 Real-time Crypto Dashboard: React + WebSocket displaying live crypto prices with animated charts.",
+                "🧠 Mental Health Chatbot: Empathetic AI assistant with sentiment analysis using TensorFlow.js.",
+                "🛒 Smart E-commerce with Recommendations: PHP + MySQL + ML-based product suggestions.",
+                "🎮 Three.js Interactive Game: Browser-based 3D adventure game with physics and WebGL.",
+                "📝 Collaborative Code Editor: Real-time code collaboration similar to VS Code Live Share.",
+                "🔮 AI Image Generator Gallery: Integrate Stable Diffusion API to generate and share art.",
+                "📱 PWA Weather App with Offline Mode: Weather forecasts with service workers & local caching.",
+                "🤖 Voice-Controlled Task Manager: React + Web Speech API + localStorage for voice commands.",
+                "📈 AI Stock Sentiment Analyzer: Fetch news and analyze sentiment with transformer models."
+            ];
+
+            const generateIdea = () => {
+                setLoadingIdea(true);
+                setTimeout(() => {
+                    const randomIdea = projectIdeas[Math.floor(Math.random() * projectIdeas.length)];
+                    setIdea(randomIdea);
+                    setLoadingIdea(false);
+                    showToast("✨ AI-generated idea ready! Build something amazing.", "success");
+                }, 500);
+            };
+
+            return (
+                <div style={{
+                    background: 'rgba(0,255,255,0.05)',
+                    borderRadius: '20px',
+                    padding: '40px 30px',
+                    margin: '50px 0 20px',
+                    textAlign: 'center',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    backdropFilter: 'blur(8px)'
+                }}>
+                    <h3 style={{ fontSize: '1.8rem', marginBottom: '10px' }}>
+                        <i className="fas fa-lightbulb" style={{ color: '#ffcc00' }}></i> AI Project Idea Generator
+                    </h3>
+                    <p style={{ color: '#b0b0d0', marginTop: '10px', maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto' }}>
+                        Stuck? Let AI spark your next big project tailored for your stack (React, PHP, Three.js).
+                    </p>
+                    <button
+                        onClick={generateIdea}
+                        disabled={loadingIdea}
+                        style={{
+                            background: 'linear-gradient(135deg, #00ffff, #00ffaa)',
+                            border: 'none',
+                            padding: '12px 30px',
+                            borderRadius: '40px',
+                            fontWeight: 'bold',
+                            color: '#050510',
+                            cursor: 'pointer',
+                            marginTop: '25px',
+                            fontSize: '1rem',
+                            transition: 'transform 0.2s',
+                            boxShadow: '0 0 10px rgba(0,255,255,0.3)'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                    >
+                        {loadingIdea ? <><i className="fas fa-spinner fa-spin"></i> Generating...</> : <><i className="fas fa-magic"></i> Generate Idea</>}
+                    </button>
+                    {idea && (
+                        <div style={{
+                            marginTop: '30px',
+                            padding: '20px',
+                            background: 'rgba(0,0,0,0.5)',
+                            borderRadius: '15px',
+                            color: '#00ffff',
+                            fontSize: '1.1rem',
+                            lineHeight: '1.6',
+                            borderLeft: '3px solid #00ffff'
+                        }}>
+                            <i className="fas fa-robot" style={{ marginRight: '10px' }}></i> {idea}
+                            <br /><small style={{ display: 'block', marginTop: '12px', color: '#aaa' }}>
+                                ✨ Build this with Priyansh's tech stack (React, PHP, AI)!
+                            </small>
+                        </div>
+                    )}
+                </div>
             );
         };
 
@@ -2741,7 +3024,7 @@ const Projects = () => {
             }
         }
 
-        // --- Main App ---
+        // --- Main App with AI Integration ---
         const App = () => (
             <ErrorBoundary>
                 <ToastProvider>
@@ -2757,10 +3040,16 @@ const Projects = () => {
                             <Skills />
                             <Timeline />
                             <Projects />
+                            {/* AI Project Idea Generator placed before Features */}
+                            <div className="container">
+                                <AIProjectIdea />
+                            </div>
                             <Features />
                             <Contact />
                         </main>
                         <Footer />
+                        {/* AI Chat Widget */}
+                        <AIChatWidget />
                     </React.Fragment>
                 </ToastProvider>
             </ErrorBoundary>
